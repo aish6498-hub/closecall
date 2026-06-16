@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CloseCall — Observations</title>
+    <meta name="author" content="Aishwarya Rajmohan" />
+    <meta
+      name="description"
+      content="Log and track your close calls with asteroids. View NASA data, add personal ratings and notes, and build your own asteroid watchlist."
+    />
+    <meta
+      name="keywords"
+      content="asteroid observations, close calls, NASA data, personal ratings, watchlist, asteroid tracking"
+    />
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/observations.css" />
+
+    <!-- favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicons/favicon-16x16.png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="nav">
+      <span class="nav-logo">CLOSECALL</span>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">FEED</a>
+        <a href="watchlist.html" class="nav-link">WATCHLIST</a>
+        <a href="observations.html" class="nav-link active">OBSERVATIONS</a>
+        <a href="stats.html" class="nav-link">STATS</a>
+      </div>
+    </nav>
+
+    <main class="page">
+      <!-- LOG OBSERVATION FORM -->
+      <section class="form-toggle" id="formToggle">
+        <div
+          class="form-header"
+          id="formHeader"
+          role="button"
+          tabindex="0"
+          aria-expanded="true"
+        >
+          <div class="form-header-left">
+            <span class="form-header-title">LOG OBSERVATION</span>
+            <span class="form-header-sub" id="formSub"
+              >— select an asteroid to begin</span
+            >
+          </div>
+          <i
+            class="fa-solid fa-chevron-up form-chevron"
+            id="formChevron"
+            aria-hidden="true"
+          ></i>
+        </div>
+
+        <div class="form-body" id="formBody">
+          <div class="search-row">
+            <label for="asteroidSearch">SEARCH ASTEROID</label>
+            <input
+              type="text"
+              id="asteroidSearch"
+              class="search-input"
+              placeholder="Type asteroid name or NASA ID..."
+              autocomplete="off"
+            />
+            <div class="search-dropdown" id="searchDropdown"></div>
+          </div>
+
+          <div class="static-grid" id="nasaFields">
+            <div class="static-field">
+              <span class="static-label">APPROACH DATE</span>
+              <span class="static-val" id="fieldDate">—</span>
+            </div>
+            <div class="static-field">
+              <span class="static-label">MISS DISTANCE</span>
+              <span class="static-val" id="fieldDistance">—</span>
+            </div>
+            <div class="static-field">
+              <span class="static-label">EST. SIZE</span>
+              <span class="static-val" id="fieldSize">—</span>
+            </div>
+            <div class="static-field">
+              <span class="static-label">NASA STATUS</span>
+              <span id="fieldHazard" class="static-val">—</span>
+            </div>
+          </div>
+
+          <form id="observationForm" novalidate>
+            <input type="hidden" id="nasaId" name="nasaId" />
+            <input type="hidden" id="asteroidName" name="asteroidName" />
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="obsTitle">OBSERVATION TITLE</label>
+                <input
+                  type="text"
+                  id="obsTitle"
+                  name="title"
+                  placeholder="Auto-filled when asteroid selected"
+                />
+                <span class="field-error" id="titleError"></span>
+              </div>
+              <div class="field">
+                <label for="obsTag">TAG</label>
+                <input
+                  type="text"
+                  id="obsTag"
+                  name="tag"
+                  placeholder="e.g. close call, watch"
+                />
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label>PERSONAL DANGER RATING</label>
+                <div
+                  class="rating-row"
+                  id="ratingRow"
+                  role="radiogroup"
+                  aria-label="Danger rating 1 to 5"
+                >
+                  <button
+                    type="button"
+                    class="rating-dot"
+                    data-val="1"
+                    aria-label="Rating 1"
+                  >
+                    1
+                  </button>
+                  <button
+                    type="button"
+                    class="rating-dot"
+                    data-val="2"
+                    aria-label="Rating 2"
+                  >
+                    2
+                  </button>
+                  <button
+                    type="button"
+                    class="rating-dot"
+                    data-val="3"
+                    aria-label="Rating 3"
+                  >
+                    3
+                  </button>
+                  <button
+                    type="button"
+                    class="rating-dot"
+                    data-val="4"
+                    aria-label="Rating 4"
+                  >
+                    4
+                  </button>
+                  <button
+                    type="button"
+                    class="rating-dot"
+                    data-val="5"
+                    aria-label="Rating 5"
+                  >
+                    5
+                  </button>
+                </div>
+                <input
+                  type="hidden"
+                  id="dangerRating"
+                  name="dangerRating"
+                  value=""
+                />
+                <span class="field-error" id="ratingError"></span>
+              </div>
+              <div class="field">
+                <label for="obsNotes">NOTES</label>
+                <textarea
+                  id="obsNotes"
+                  name="notes"
+                  placeholder="What do you think about this one?"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-error" id="formError"></div>
+            <button type="submit" class="btn-submit">LOG OBSERVATION</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- OBSERVATIONS LIST -->
+      <h2 class="list-title">YOUR OBSERVATIONS</h2>
+
+      <div id="observationsList">
+        <!-- Cards injected by observations.js -->
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display: none">
+        <p>No observations logged yet.</p>
+        <p>Use the form above to log your first asteroid.</p>
+      </div>
+    </main>
+
+    <!-- EDIT MODAL -->
+    <div
+      class="modal-backdrop"
+      id="modalBackdrop"
+      style="display: none"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Edit observation"
+    >
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">EDIT OBSERVATION</span>
+          <button class="modal-close" id="modalClose" aria-label="Close modal">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </div>
+        <form id="editForm" novalidate>
+          <input type="hidden" id="editId" name="id" />
+          <div class="form-grid">
+            <div class="field">
+              <label for="editTitle">OBSERVATION TITLE</label>
+              <input type="text" id="editTitle" name="title" />
+            </div>
+            <div class="field">
+              <label for="editTag">TAG</label>
+              <input type="text" id="editTag" name="tag" />
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label>PERSONAL DANGER RATING</label>
+              <div
+                class="rating-row"
+                id="editRatingRow"
+                role="radiogroup"
+                aria-label="Danger rating 1 to 5"
+              >
+                <button type="button" class="rating-dot" data-val="1">1</button>
+                <button type="button" class="rating-dot" data-val="2">2</button>
+                <button type="button" class="rating-dot" data-val="3">3</button>
+                <button type="button" class="rating-dot" data-val="4">4</button>
+                <button type="button" class="rating-dot" data-val="5">5</button>
+              </div>
+              <input type="hidden" id="editDangerRating" name="dangerRating" />
+            </div>
+            <div class="field">
+              <label for="editNotes">NOTES</label>
+              <textarea id="editNotes" name="notes"></textarea>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" id="modalCancel">
+              CANCEL
+            </button>
+            <button type="submit" class="btn-submit">SAVE CHANGES</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="js/observations.js"></script>
+  </body>
+</html>
