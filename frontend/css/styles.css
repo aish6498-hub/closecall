@@ -1,28 +1,28 @@
 /* ===== ROOT VARIABLES ===== */
 :root {
   /* ===== PALETTE — change only these to swap the whole theme ===== */
-  --palette-bg: #080608;
-  --palette-surface: #0c0508;
-  --palette-surface2: #100608;
-  --palette-primary: #c0392b;
-  --palette-primary-dark: #5c1a10;
-  --palette-border: #3a1a10;
-  --palette-border2: #1e0e0a;
-  --palette-muted: #6a4a3a;
-  --palette-text: #d4c5b8;
-  --palette-text-dim: #8a7060;
-  --palette-hazard: #ff7060;
-  --palette-hazard-bg: #3d0f0a;
-  --palette-hazard-border: #7b1a10;
-  --palette-safe: #50c878;
-  --palette-safe-bg: #0a2010;
-  --palette-safe-border: #1a5c30;
-  --palette-diverge: #b388ff;
-  --palette-diverge-bg: #1a0f2e;
-  --palette-diverge-border: #4a2a7a;
-  --palette-timeline-bg: #08040c;
-  --palette-timeline-border: #2a1040;
-  --palette-timeline-accent: #7a4aaa;
+  --palette-bg: #040403;
+  --palette-surface: #0d0b09;
+  --palette-surface2: #151210;
+  --palette-primary: #c8823a;
+  --palette-primary-dark: #3a2210;
+  --palette-border: #4a3828;
+  --palette-border2: #221a12;
+  --palette-muted: #7a6858;
+  --palette-text: #ddd4c8;
+  --palette-text-dim: #9a8878;
+  --palette-hazard: #e8702a;
+  --palette-hazard-bg: #180e04;
+  --palette-hazard-border: #502810;
+  --palette-safe: #70b888;
+  --palette-safe-bg: #081408;
+  --palette-safe-border: #1a3c20;
+  --palette-diverge: #a898d8;
+  --palette-diverge-bg: #100e18;
+  --palette-diverge-border: #3a3050;
+  --palette-timeline-bg: #060504;
+  --palette-timeline-border: #1e1810;
+  --palette-timeline-accent: #6a5030;
 
   /* ===== SEMANTIC ROLES ===== */
   --color-bg: var(--palette-bg);
@@ -82,21 +82,29 @@ body {
   background: var(--color-surface);
   border-bottom: 0.5px solid var(--color-border);
   padding: 14px 24px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 28px;
 }
 
 .nav-logo {
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--color-primary);
-  letter-spacing: 3px;
+  letter-spacing: 2px;
+  justify-self: start;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  justify-self: center;
 }
 
 .nav-link {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-muted);
   text-decoration: none;
   letter-spacing: 1px;
@@ -115,7 +123,7 @@ body {
   background: var(--color-primary-dark);
   border: 0.5px solid var(--color-primary);
   border-radius: var(--radius-md);
-  color: #ffb3a0;
+  color: #e8c8a0;
   font-family: var(--font-display);
   font-size: 10px;
   letter-spacing: 2px;
@@ -124,7 +132,7 @@ body {
 }
 
 .btn-submit:hover {
-  background: #7a2218;
+  background: #4a2e14;
 }
 
 .btn-cancel {
@@ -186,8 +194,8 @@ body {
 
 .field input,
 .field textarea {
-  background: #160a08;
-  border: 0.5px solid #5a2a18;
+  background: #0a0906;
+  border: 0.5px solid #2e2218;
   border-radius: var(--radius-md);
   color: var(--color-text);
   font-family: var(--font-body);
@@ -240,7 +248,7 @@ body {
 .rating-dot.active {
   background: var(--color-primary-dark);
   border-color: var(--color-primary);
-  color: #ffb3a0;
+  color: #e8c8a0;
 }
 
 /* ===== SHARED FORM GRID ===== */
@@ -249,4 +257,13 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-top: 14px;
+}
+
+@media (max-width: 600px) {
+  .nav-links {
+    position: static;
+    transform: none;
+    margin-left: auto;
+    gap: 16px;
+  }
 }
