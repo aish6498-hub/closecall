@@ -126,23 +126,23 @@ closecall/
 │   ├── watchlist.js              # Watchlist CRUD routes — PRIYAN
 │   └── observations.js           # Observations CRUD routes — AISHWARYA
 │
-├── public/
-│   ├── index.html                # Threat Board — PRIYAN
-│   ├── watchlist.html            # Watchlist page — PRIYAN
-│   ├── observations.html         # Observations page — AISHWARYA
-│   └── stats.html                # Stats page — AISHWARYA
-│
-├── js/
-│   ├── feed.js                   # Threat Board client logic — PRIYAN
-│   ├── watchlist.js              # Watchlist client logic — PRIYAN
-│   ├── observations.js           # Journal form + observation cards — AISHWARYA
-│   ├── timeline.js               # Approach timeline visualization — AISHWARYA
-│   └── stats.js                  # Stats dashboard + charts — AISHWARYA
-│
-└── css/
-    ├── styles.css                # Shared reset, variables, nav — SHARED
-    ├── feed.css                  # Threat Board + Watchlist styles — PRIYAN
-    └── observations.css          # Observations + Stats + Timeline styles — AISHWARYA
+└── frontend/
+    ├── index.html                # Threat Board — PRIYAN
+    ├── watchlist.html            # Watchlist page — PRIYAN
+    ├── observations.html         # Observations page — AISHWARYA
+    ├── stats.html                # Stats page — AISHWARYA
+    │
+    ├── js/
+    │   ├── feed.js               # Threat Board client logic — PRIYAN
+    │   ├── watchlist.js          # Watchlist client logic — PRIYAN
+    │   ├── observations.js       # Journal form + observation cards — AISHWARYA
+    │   ├── timeline.js           # Approach timeline visualization — AISHWARYA
+    │   └── stats.js              # Stats dashboard + charts — AISHWARYA
+    │
+    └── css/
+        ├── styles.css            # Shared variables, base, nav — SHARED
+        ├── feed.css              # Threat Board + Watchlist styles — PRIYAN
+        └── observations.css      # Observations + Stats + Timeline styles — AISHWARYA
 ```
 
 > No leftover files. No routes/users.js, no unused imports, no default boilerplate. Every file in the repo is used.
@@ -221,12 +221,111 @@ Base URL: `http://localhost:3000`
 
 ---
 
+## Feature Specs
+
+---
+
+### Observations Page — Aishwarya
+
+**File:** `public/observations.html` · `js/observations.js` · `css/observations.css`
+**Route:** `/observations.html`
+**User stories covered:** 7, 8, 9, 10
+
+#### Purpose
+
+The Observations page is the personal research layer of CloseCall. Users log asteroids they find interesting, assign a personal danger rating, and add notes and tags. Over time this becomes a research record they can revisit, edit, and analyse on the Stats page.
+
+---
+
+#### Form — Log New Observation
+
+The form sits at the top of the page. All fields are in a single `<form>` element with standard HTML input elements — no divs or spans used as buttons.
+
+**Fields:**
+
+| Field                  | Type                 | Filled by                              | Required |
+| ---------------------- | -------------------- | -------------------------------------- | -------- |
+| Asteroid ID            | hidden input         | Passed via URL query string            | yes      |
+| Asteroid name          | text (read only)     | Auto-filled from NASA on page load     | yes      |
+| Approach date          | date (read only)     | Auto-filled from NASA                  | yes      |
+| Miss distance (km)     | number (read only)   | Auto-filled from NASA                  | yes      |
+| Estimated size (m)     | number (read only)   | Auto-filled from NASA (avg of min/max) | yes      |
+| NASA hazard status     | checkbox (read only) | Auto-filled from NASA                  | yes      |
+| Personal danger rating | number input 1–5     | User fills in                          | yes      |
+| Tag                    | text input           | User fills in                          | no       |
+| Notes                  | textarea             | User fills in                          | no       |
+
+**Entry flow:**
+User clicks "Log Observation" on an asteroid card on the Threat Board. That button links to `observations.html?nasaId=3542519`. On page load, `js/observations.js` reads the `nasaId` query parameter, fetches `GET /api/nasa/neo/:id`, and auto-populates all NASA fields. User fills in personal fields and submits.
+
+> **Dev note:** Aishwarya does not need Priyan's "Log Observation" button to develop or test this page. During development, visit `observations.html?nasaId=3542519` directly in the browser to simulate the flow. The button is Priyan's responsibility and plugs in automatically once added.
+
+**Submit behaviour:**
+
+- Calls `POST /api/observations` with all field values
+- On success — clears the form, prepends new observation card to the list without page refresh
+- On error — shows inline error message below the form
+
+---
+
+#### Observation Cards
+
+Cards are rendered client-side by `js/observations.js` using vanilla JS. No server-side HTML rendering. On page load, `GET /api/observations` is called and all cards are built from the response and injected into the DOM.
+
+**Each card displays:**
+
+- Asteroid name (large, prominent)
+- Approach date
+- Miss distance
+- Estimated size
+- NASA hazard status badge — red "HAZARDOUS" or green "SAFE"
+- Personal danger rating — displayed as 1–5 scale
+- Divergence badge — shown when user's rating conflicts with NASA's status (e.g. user rated 4–5 but NASA says safe, or user rated 1–2 but NASA says hazardous)
+- Tag — shown as a small label
+- Notes — shown as body text
+- Edit button
+- Delete button
+- Expand timeline toggle — "Show Approach History" / "Hide Approach History"
+
+**Card layout:** Full width, stacked vertically. Timeline expands below the card content when toggled.
+
+---
+
+#### Edit — Modal
+
+Clicking Edit on a card opens a modal pre-filled with that observation's current values. User edits any field and clicks Save.
+
+- Calls `PUT /api/observations/:id` with updated values
+- On success — closes modal, updates the card in the DOM without page refresh
+- On cancel — closes modal, no changes made
+- NASA auto-filled fields (name, date, distance, size, hazard) are shown but not editable in the modal
+
+---
+
+#### Delete
+
+Clicking Delete shows a confirmation prompt — "Delete this observation? This cannot be undone."
+
+- On confirm — calls `DELETE /api/observations/:id`, removes the card from the DOM without page refresh
+- On cancel — dismisses prompt, no change
+
+---
+
+#### Edge Cases
+
+- No observations logged yet — show empty state message: "No observations logged yet. Use the form above to log your first asteroid."
+- NASA ID not found — show inline error below the ID field: "Asteroid not found. Check the NASA ID and try again."
+- API unavailable — show error message: "Could not reach NASA. Try again in a moment."
+- Required fields missing on submit — show inline validation errors per field
+
+---
+
 ## Sections To Complete
 
 - [ ] Data Models
 - [ ] Feature Specs — Threat Board (Priyan)
 - [ ] Feature Specs — Watchlist (Priyan)
-- [ ] Feature Specs — Observations (Aishwarya)
+- [x] Feature Specs — Observations (Aishwarya)
 - [ ] Feature Specs — Approach Timeline (Aishwarya)
 - [ ] Feature Specs — Stats Dashboard (Aishwarya)
 - [ ] README template

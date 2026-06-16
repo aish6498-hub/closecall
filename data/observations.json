@@ -1,0 +1,58 @@
+[
+  {
+    "nasaId": "2099942",
+    "asteroidName": "99942 Apophis",
+    "title": "Apophis — The Big One",
+    "tag": "close call",
+    "dangerRating": 4,
+    "notes": "Closest approach in recorded history for an asteroid this size. Will be visible to the naked eye. Rated higher than NASA — 37,600 km is inside geostationary orbit.",
+    "isHazardous": true,
+    "approachDate": "2029-04-13",
+    "missDistance": "37,600 km",
+    "estimatedSize": "~370 m",
+    "createdAt": { "$date": "2024-01-15T10:30:00Z" },
+    "updatedAt": { "$date": "2024-01-15T10:30:00Z" }
+  },
+  {
+    "nasaId": "3542519",
+    "asteroidName": "(2023 DZ2)",
+    "title": "DZ2 — Casual Watch",
+    "tag": "interesting",
+    "dangerRating": 4,
+    "notes": "Relatively safe pass but worth monitoring. Half the size of Apophis.",
+    "isHazardous": false,
+    "approachDate": "2023-03-25",
+    "missDistance": "168,000 km",
+    "estimatedSize": "~50 m",
+    "createdAt": { "$date": "2024-01-14T08:00:00Z" },
+    "updatedAt": { "$date": "2024-01-14T08:00:00Z" }
+  },
+  {
+    "nasaId": "3986446",
+    "asteroidName": "(2021 GT2)",
+    "title": "GT2 — Routine Pass",
+    "tag": "watch",
+    "dangerRating": 2,
+    "notes": "Standard approach, nothing alarming. Good reference object for size comparison.",
+    "isHazardous": false,
+    "approachDate": "2022-09-20",
+    "missDistance": "530,000 km",
+    "estimatedSize": "~120 m",
+    "createdAt": { "$date": "2024-01-13T14:22:00Z" },
+    "updatedAt": { "$date": "2024-01-13T14:22:00Z" }
+  },
+  {
+    "nasaId": "2001566",
+    "asteroidName": "1566 Icarus",
+    "title": "Icarus — Old Timer",
+    "tag": "hazardous",
+    "dangerRating": 1,
+    "notes": "NASA flags this as hazardous but I think the miss distance is comfortable enough. Named after the mythological figure who flew too close to the sun.",
+    "isHazardous": true,
+    "approachDate": "2015-06-16",
+    "missDistance": "8,000,000 km",
+    "estimatedSize": "~1.4 km",
+    "createdAt": { "$date": "2024-01-12T09:00:00Z" },
+    "updatedAt": { "$date": "2024-01-12T09:00:00Z" }
+  }
+]
