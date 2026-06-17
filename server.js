@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import observationsRouter from "./routes/observations.js";
+import nasaRouter from "./routes/nasa.js";
 
 dotenv.config();
 
@@ -13,9 +14,15 @@ const app = express();
 app.use(express.json());
 
 // 2. API Routes
+app.use("/api", (req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
 app.use("/api/observations", observationsRouter);
+app.use("/api/nasa", nasaRouter);
 
 // 3. Static Files
+
 app.use(express.static("frontend"));
 
 // 4. Keep-alive listener

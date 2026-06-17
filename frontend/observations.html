@@ -115,6 +115,7 @@
           <form id="observationForm" novalidate>
             <input type="hidden" id="nasaId" name="nasaId" />
             <input type="hidden" id="asteroidName" name="asteroidName" />
+            <input type="hidden" id="asteroidSpeed" name="speed" />
 
             <div class="form-grid">
               <div class="field">
@@ -214,6 +215,10 @@
 
       <!-- OBSERVATIONS LIST -->
       <h2 class="list-title">YOUR OBSERVATIONS</h2>
+
+      <div class="tag-filter" id="tagFilter">
+        <!-- injected by observations.js -->
+      </div>
 
       <div id="observationsList">
         <!-- Cards injected by observations.js -->

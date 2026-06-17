@@ -36,6 +36,7 @@ router.post("/", async (req, res) => {
       approachDate,
       missDistance,
       estimatedSize,
+      speed,
     } = req.body;
 
     if (!nasaId || !asteroidName || !dangerRating) {
@@ -55,6 +56,7 @@ router.post("/", async (req, res) => {
       approachDate: approachDate || "",
       missDistance: missDistance || "",
       estimatedSize: estimatedSize || "",
+      speed: speed || "",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
