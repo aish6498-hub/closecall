@@ -204,7 +204,10 @@ function appendCard(obs) {
 function buildTagFilter(observations) {
   const tagFilter = document.getElementById("tagFilter");
   const tags = [...new Set(observations.map((o) => o.tag).filter(Boolean))];
-  if (tags.length === 0) { tagFilter.innerHTML = ""; return; }
+  if (tags.length === 0) {
+    tagFilter.innerHTML = "";
+    return;
+  }
   tagFilter.innerHTML = `
     <span class="tag-filter-label">FILTER BY TAG</span>
     <button class="tag-filter-btn active" data-tag="all">ALL</button>
@@ -212,7 +215,9 @@ function buildTagFilter(observations) {
   `;
   tagFilter.querySelectorAll(".tag-filter-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      tagFilter.querySelectorAll(".tag-filter-btn").forEach((b) => b.classList.remove("active"));
+      tagFilter
+        .querySelectorAll(".tag-filter-btn")
+        .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       activeTag = btn.dataset.tag === "all" ? null : btn.dataset.tag;
       renderFilteredCards();
@@ -222,7 +227,9 @@ function buildTagFilter(observations) {
 
 function renderFilteredCards() {
   observationsList.innerHTML = "";
-  const filtered = activeTag ? allObservations.filter((o) => o.tag === activeTag) : allObservations;
+  const filtered = activeTag
+    ? allObservations.filter((o) => o.tag === activeTag)
+    : allObservations;
   if (filtered.length === 0) {
     observationsList.innerHTML = `<p class="load-error">No observations with tag "${activeTag}".</p>`;
     return;
