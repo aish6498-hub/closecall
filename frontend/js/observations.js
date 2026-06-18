@@ -1,3 +1,5 @@
+import { escHtml, isDivergence, divergeTooltip, formatSize } from "./utils.js";
+
 const API = {
   observations: "/api/observations",
   nasa: (id) => `/api/nasa/neo/${id}`,
@@ -116,7 +118,7 @@ function buildCard(obs) {
         </div>
         <div class="obs-stat">
           <div class="obs-stat-label">EST. SIZE</div>
-          <div class="obs-stat-value">${escHtml(obs.estimatedSize)}</div>
+          <div class="obs-stat-value">${formatSize(obs.estimatedSize)}</div>
         </div>
         <div class="obs-stat">
           <div class="obs-stat-label">SPEED</div>
@@ -341,7 +343,6 @@ function populateAsteroidFields(data) {
   const minSize = data.estimated_diameter?.meters?.estimated_diameter_min || 0;
   const maxSize = data.estimated_diameter?.meters?.estimated_diameter_max || 0;
   const avgSize = Math.round((minSize + maxSize) / 2);
-  const size = avgSize ? `≈${avgSize} m` : "—";
 
   const speed = latest.relative_velocity
     ? `${Number(latest.relative_velocity.kilometers_per_second).toFixed(2)} km/s`
@@ -350,9 +351,10 @@ function populateAsteroidFields(data) {
   document.getElementById("nasaId").value = data.id;
   document.getElementById("asteroidName").value = name;
   document.getElementById("asteroidSpeed").value = speed;
+  document.getElementById("asteroidSize").value = avgSize;
   document.getElementById("fieldDate").textContent = date;
   document.getElementById("fieldDistance").textContent = distance;
-  document.getElementById("fieldSize").textContent = size;
+  document.getElementById("fieldSize").textContent = formatSize(avgSize);
 
   const hazardEl = document.getElementById("fieldHazard");
   hazardEl.innerHTML = isHazardous
@@ -375,6 +377,7 @@ function clearAsteroidFields() {
   document.getElementById("nasaId").value = "";
   document.getElementById("asteroidName").value = "";
   document.getElementById("asteroidSpeed").value = "";
+  document.getElementById("asteroidSize").value = "";
   document.getElementById("fieldDate").textContent = "—";
   document.getElementById("fieldDistance").textContent = "—";
   document.getElementById("fieldSize").textContent = "—";
@@ -444,7 +447,7 @@ function bindFormEvents() {
       isHazardous: selectedAsteroid.is_potentially_hazardous_asteroid,
       approachDate: document.getElementById("fieldDate").textContent,
       missDistance: document.getElementById("fieldDistance").textContent,
-      estimatedSize: document.getElementById("fieldSize").textContent,
+      estimatedSize: Number(document.getElementById("asteroidSize").value),
       speed: document.getElementById("asteroidSpeed").value,
     };
 
@@ -498,31 +501,6 @@ function showFormError(msg) {
 }
 
 // ─── UTILS ────────────────────────────────────────────────────
-
-function isDivergence(rating, isHazardous) {
-  if (isHazardous && rating <= 2) return true;
-  if (!isHazardous && rating >= 4) return true;
-  return false;
-}
-
-function divergeTooltip(rating, isHazardous) {
-  if (isHazardous && rating <= 2) {
-    return `You rated this ${rating}/5 danger.<br>NASA classifies it as HAZARDOUS.<br>You think it is safer than NASA.`;
-  }
-  if (!isHazardous && rating >= 4) {
-    return `You rated this ${rating}/5 danger.<br>NASA classifies it as SAFE.<br>You think it is more dangerous than NASA.`;
-  }
-  return "";
-}
-
-function escHtml(str) {
-  if (!str) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 // ─── DELETE ───────────────────────────────────────────────────
 

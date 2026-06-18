@@ -2,6 +2,21 @@ import express from "express";
 import { ObjectId } from "mongodb";
 import { connectDB } from "../db/connection.js";
 
+function parseEstimatedSize(sizeStr) {
+  if (
+    sizeStr === null ||
+    sizeStr === undefined ||
+    sizeStr === "" ||
+    sizeStr === "—"
+  )
+    return null;
+  if (typeof sizeStr === "number") return sizeStr;
+  const clean = String(sizeStr).replace(/[≈~\s]/g, "");
+  if (clean.endsWith("km")) return parseFloat(clean) * 1000;
+  if (clean.endsWith("m")) return parseFloat(clean);
+  return null;
+}
+
 const router = express.Router();
 
 // GET /api/observations - Returns all observations, newest first
@@ -55,7 +70,7 @@ router.post("/", async (req, res) => {
       isHazardous: Boolean(isHazardous),
       approachDate: approachDate || "",
       missDistance: missDistance || "",
-      estimatedSize: estimatedSize || "",
+      estimatedSize: parseEstimatedSize(estimatedSize),
       speed: speed || "",
       createdAt: new Date(),
       updatedAt: new Date(),
