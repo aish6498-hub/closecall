@@ -9,7 +9,7 @@
     "isHazardous": true,
     "approachDate": "2029-04-13",
     "missDistance": "37,600 km",
-    "estimatedSize": "~370 m",
+    "estimatedSize": "≈370 m",
     "createdAt": { "$date": "2024-01-15T10:30:00Z" },
     "updatedAt": { "$date": "2024-01-15T10:30:00Z" }
   },
@@ -23,7 +23,7 @@
     "isHazardous": false,
     "approachDate": "2023-03-25",
     "missDistance": "168,000 km",
-    "estimatedSize": "~50 m",
+    "estimatedSize": "≈50 m",
     "createdAt": { "$date": "2024-01-14T08:00:00Z" },
     "updatedAt": { "$date": "2024-01-14T08:00:00Z" }
   },
@@ -37,7 +37,7 @@
     "isHazardous": false,
     "approachDate": "2022-09-20",
     "missDistance": "530,000 km",
-    "estimatedSize": "~120 m",
+    "estimatedSize": "≈120 m",
     "createdAt": { "$date": "2024-01-13T14:22:00Z" },
     "updatedAt": { "$date": "2024-01-13T14:22:00Z" }
   },
@@ -51,7 +51,7 @@
     "isHazardous": true,
     "approachDate": "2015-06-16",
     "missDistance": "8,000,000 km",
-    "estimatedSize": "~1.4 km",
+    "estimatedSize": "≈1.4 km",
     "createdAt": { "$date": "2024-01-12T09:00:00Z" },
     "updatedAt": { "$date": "2024-01-12T09:00:00Z" }
   }
