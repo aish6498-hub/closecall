@@ -11,8 +11,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/feed.css" />
   </head>
   <body>
+    <div class="space-bg" aria-hidden="true">
+      <span class="meteor"></span>
+      <span class="meteor"></span>
+      <span class="meteor"></span>
+      <span class="meteor"></span>
+    </div>
+
     <nav class="nav">
       <span class="nav-logo">CLOSECALL</span>
       <div class="nav-links">
@@ -22,5 +30,86 @@
         <a href="stats.html" class="nav-link">STATS</a>
       </div>
     </nav>
+
+    <main class="page">
+      <header class="page-head">
+        <div>
+          <h1>Near-Earth objects — this week</h1>
+          <p class="page-sub" id="feed-meta">Loading…</p>
+        </div>
+        <button class="btn-submit" id="refresh-btn">REFRESH</button>
+      </header>
+
+      <section class="stat-cards">
+        <div class="stat-card">
+          <span class="stat-label">Objects this week</span>
+          <span class="stat-value" id="stat-total">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Potentially hazardous</span>
+          <span class="stat-value danger" id="stat-hazard">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Closest approach</span>
+          <span class="stat-value" id="stat-closest">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Fastest object</span>
+          <span class="stat-value" id="stat-fastest">—</span>
+        </div>
+      </section>
+
+      <section class="comparator" id="comparator" hidden>
+        <div class="comparator-head">
+          <span class="comparator-title">SIZE COMPARATOR</span>
+          <span class="comparator-hint">Tap any asteroid below to compare</span>
+        </div>
+        <p class="comparator-headline" id="comparator-headline"></p>
+        <div class="comparator-bars" id="comparator-bars"></div>
+      </section>
+
+      <section class="controls">
+        <div class="control-group">
+          <span class="control-label">FILTER</span>
+          <div class="pill-row" id="filter-pills">
+            <button class="pill is-active" data-value="all">All</button>
+            <button class="pill" data-value="hazardous">Hazardous only</button>
+            <button class="pill" data-value="under1ld">Under 1 LD</button>
+            <button class="pill" data-value="under500m">Under 500m</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <span class="control-label">SORT</span>
+          <div class="pill-row" id="sort-pills">
+            <button class="pill is-active" data-value="miss">Miss distance</button>
+            <button class="pill" data-value="date">Date</button>
+            <button class="pill" data-value="size">Size</button>
+            <button class="pill" data-value="velocity">Velocity</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="feed-panel">
+        <table class="feed-table">
+          <thead>
+            <tr>
+              <th>Object</th>
+              <th>Approach date</th>
+              <th>Miss distance</th>
+              <th>Est. diameter</th>
+              <th>Velocity</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="feed-body">
+            <tr>
+              <td colspan="6" class="empty-row">Loading the feed…</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <script type="module" src="js/feed.js"></script>
   </body>
 </html>
