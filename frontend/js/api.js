@@ -8,6 +8,7 @@ async function request(url, options) {
       const body = await res.json();
       if (body.error) message = body.error;
     } catch {
+      // To avoid no block error.
     }
     throw new Error(message);
   }
@@ -19,7 +20,6 @@ async function request(url, options) {
 export function getFeed() {
   return request(`${NASA_BASE}/feed`);
 }
-
 
 export async function getNeo(id) {
   const neo = await request(`${NASA_BASE}/neo/${id}`);

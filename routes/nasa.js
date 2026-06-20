@@ -22,23 +22,23 @@ function shapeNeo(neo, approach) {
     diameterMaxM: meters.estimated_diameter_max,
   };
 }
- 
+
 router.get("/feed", async (req, res) => {
   try {
     const start = new Date();
     const end = new Date();
-    end.setDate(end.getDate() + 7); 
- 
+    end.setDate(end.getDate() + 7);
+
     const url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${isoDate(
       start
     )}&end_date=${isoDate(end)}&api_key=${process.env.NASA_API_KEY}`;
- 
+
     const response = await fetch(url);
     if (!response.ok) {
       return res.status(response.status).json({ error: "NASA API error" });
     }
     const data = await response.json();
- 
+
     const rows = [];
     for (const day of Object.values(data.near_earth_objects)) {
       for (const neo of day) {
@@ -46,7 +46,7 @@ router.get("/feed", async (req, res) => {
         if (approach) rows.push(shapeNeo(neo, approach));
       }
     }
- 
+
     res.json({
       start: isoDate(start),
       end: isoDate(end),
