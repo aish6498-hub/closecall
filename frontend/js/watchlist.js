@@ -15,7 +15,7 @@ const els = {
 
 let items = []; // saved docs from Mongo
 
-// Build one card. The "next approach" row starts as a placeholder and gets filled in once the live NASA lookup comes. 
+// Build one card. The "next approach" row starts as a placeholder and gets filled in once the live NASA lookup comes.
 function renderCard(item) {
   const card = document.createElement("article");
   card.className = "watch-card";
@@ -96,7 +96,7 @@ function openEditForm(card, item) {
 
     try {
       await updateWatchlistItem(item._id, { tag, note });
-      await load(); 
+      await load();
     } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = "Save changes";

@@ -11,11 +11,11 @@ import {
 } from "./format.js";
 
 // --- module state ---
-let allObjects = []; 
-let savedIds = new Set(); 
+let allObjects = [];
+let savedIds = new Set();
 let activeFilter = "all";
 let activeSort = "miss";
-let selectedId = null; 
+let selectedId = null;
 
 // Familiar things to scale asteroids.
 const REFERENCES = [
@@ -121,7 +121,7 @@ function applySort(objects) {
       return copy.sort((a, b) => b.diameterMaxM - a.diameterMaxM);
     case "velocity":
       return copy.sort((a, b) => b.velocityKms - a.velocityKms);
-    default: 
+    default:
       return copy.sort((a, b) => a.missLD - b.missLD);
   }
 }
@@ -216,7 +216,7 @@ async function handleWatch(button) {
   } catch (err) {
     button.disabled = false;
     button.textContent = "Watch";
-    alert(err.message); 
+    alert(err.message);
   }
 }
 
@@ -241,7 +241,7 @@ async function load() {
       (a, b) => b.diameterMaxM - a.diameterMaxM
     )[0];
     renderComparator(biggest);
-    renderTable(); 
+    renderTable();
   } catch (err) {
     els.tableBody.innerHTML = `<tr><td colspan="6" class="empty-row">
       ${escHtml(err.message)} Try refreshing.</td></tr>`;
