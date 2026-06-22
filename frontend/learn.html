@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CloseCall — Learn</title>
+    <meta name="author" content="Aishwarya Rajmohan" />
+    <meta
+      name="description"
+      content="Learn about near-Earth objects, asteroid classification, the Torino Scale, and historical close calls with Earth."
+    />
+    <meta
+      name="keywords"
+      content="asteroid, near-Earth object, Torino Scale, PHA, Tunguska, Chelyabinsk, Apophis, planetary defence"
+    />
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/learn.css" />
+    <!-- favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicons/favicon-16x16.png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="space-bg" aria-hidden="true"></div>
+
+    <nav class="nav">
+      <button
+        class="nav-hamburger"
+        id="navHamburger"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-bars" id="hamburgerIcon"></i>
+      </button>
+      <span class="nav-logo">CLOSECALL</span>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">FEED</a>
+        <a href="watchlist.html" class="nav-link">WATCHLIST</a>
+        <a href="observations.html" class="nav-link">OBSERVATIONS</a>
+        <a href="learn.html" class="nav-link active">LEARN</a>
+      </div>
+    </nav>
+
+    <main class="page">
+      <!-- ===== HERO ===== -->
+      <section class="learn-hero">
+        <h1 class="learn-hero-headline">
+          Every day, space rocks pass closer than the Moon.
+        </h1>
+        <p class="learn-hero-sub">
+          Near-Earth objects are asteroids and comets whose orbits bring them
+          within 1.3 AU of the Sun — close enough to warrant tracking. CloseCall
+          pulls live NASA data so you can watch them yourself.
+        </p>
+      </section>
+
+      <!-- ===== KEY CONCEPTS ===== -->
+      <section class="learn-section" aria-labelledby="concepts-heading">
+        <h2 class="learn-section-title" id="concepts-heading">KEY CONCEPTS</h2>
+        <div class="concept-grid">
+          <article class="concept-card">
+            <div class="concept-icon" aria-hidden="true">
+              <i class="fa-solid fa-ruler-horizontal"></i>
+            </div>
+            <h3 class="concept-title">Miss Distance</h3>
+            <p class="concept-body">
+              Astronomers measure close approaches in lunar distances (LD) — the
+              average gap between Earth and the Moon: 384,400 km. An asteroid
+              passing at 1 LD is as close as the Moon. At 0.5 LD, it's closer.
+              Most passes on the Feed are between 1–20 LD — still millions of
+              kilometres, but cosmically next door.
+            </p>
+          </article>
+
+          <article class="concept-card">
+            <div class="concept-icon" aria-hidden="true">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="concept-title">PHA Classification</h3>
+            <p class="concept-body">
+              NASA classifies an asteroid as a Potentially Hazardous Asteroid
+              (PHA) if it meets two criteria: its orbit brings it within 0.05 AU
+              of Earth's orbit, and it's at least 140 metres in diameter — large
+              enough to cause regional or greater damage on impact. Size and
+              proximity together trigger the flag. Being a PHA doesn't mean it
+              will hit — it means it's worth watching.
+            </p>
+          </article>
+
+          <article class="concept-card">
+            <div class="concept-icon" aria-hidden="true">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3 class="concept-title">Impact Energy</h3>
+            <p class="concept-body">
+              A 140m asteroid travelling at 20 km/s carries roughly 300 megatons
+              of energy on impact — enough to devastate a major city. Double the
+              size and the energy increases eightfold. This is why NASA's PHA
+              threshold uses both diameter and orbital proximity together — size
+              alone doesn't tell the full story.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== TORINO SCALE ===== -->
+      <section class="learn-section" aria-labelledby="torino-heading">
+        <h2 class="learn-section-title" id="torino-heading">
+          THE TORINO SCALE
+        </h2>
+        <p class="learn-section-intro">
+          The Torino Scale is NASA's 0–10 system for communicating the impact
+          threat of a specific asteroid on a specific date. It combines
+          probability of impact with estimated energy released.
+        </p>
+        <div class="torino-table" role="table" aria-label="Torino Scale levels">
+          <div class="torino-row torino-header" role="row">
+            <span role="columnheader">VALUE</span>
+            <span role="columnheader">LEVEL</span>
+            <span role="columnheader">MEANING</span>
+          </div>
+          <div class="torino-row" role="row">
+            <span class="torino-val torino-white" role="cell">0</span>
+            <span class="torino-level" role="cell">No Hazard</span>
+            <span class="torino-desc" role="cell"
+              >Orbit doesn't cross Earth's path, or too small to survive
+              atmosphere</span
+            >
+          </div>
+          <div class="torino-row" role="row">
+            <span class="torino-val torino-green" role="cell">1</span>
+            <span class="torino-level" role="cell">Routine</span>
+            <span class="torino-desc" role="cell"
+              >Merits monitoring but no cause for public concern</span
+            >
+          </div>
+          <div class="torino-row" role="row">
+            <span class="torino-val torino-yellow" role="cell">2–4</span>
+            <span class="torino-level" role="cell">Merits Attention</span>
+            <span class="torino-desc" role="cell"
+              >Close pass with low but non-zero impact probability</span
+            >
+          </div>
+          <div class="torino-row" role="row">
+            <span class="torino-val torino-orange" role="cell">5–7</span>
+            <span class="torino-level" role="cell">Threatening</span>
+            <span class="torino-desc" role="cell"
+              >Significant probability — warrants public attention and
+              preparedness</span
+            >
+          </div>
+          <div class="torino-row" role="row">
+            <span class="torino-val torino-red" role="cell">8–10</span>
+            <span class="torino-level" role="cell">Certain Impact</span>
+            <span class="torino-desc" role="cell"
+              >Confirmed collision — local destruction (8) to global catastrophe
+              (10)</span
+            >
+          </div>
+        </div>
+        <p class="torino-note">
+          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+          No known asteroid currently rates above 0. Apophis briefly reached
+          Torino 4 in 2004 before refined calculations dropped it back to 0.
+        </p>
+      </section>
+
+      <!-- ===== HISTORICAL MOMENTS ===== -->
+      <section class="learn-section" aria-labelledby="history-heading">
+        <h2 class="learn-section-title" id="history-heading">
+          HISTORICAL MOMENTS
+        </h2>
+        <div class="timeline" role="list">
+          <article class="timeline-event" role="listitem">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-year">1908</span>
+                <span class="timeline-location">
+                  <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                  Tunguska, Siberia
+                </span>
+              </div>
+              <h3 class="timeline-title">The Tunguska Event</h3>
+              <p class="timeline-body">
+                A rocky asteroid roughly 50 metres across exploded 8–10 km above
+                the Podkamennaya Tunguska River. The airburst released energy
+                equivalent to 3–5 megatons of TNT — flattening an estimated
+                2,000 km² of forest. No crater, no fragments. Had it arrived 4
+                hours later, Earth's rotation would have placed it over St.
+                Petersburg.
+              </p>
+              <div class="timeline-stats">
+                <span class="t-stat"
+                  ><span class="t-stat-label">SIZE</span> ~50 m</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">ENERGY</span> 3–5 MT</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">AREA</span> 2,000 km²</span
+                >
+              </div>
+            </div>
+          </article>
+
+          <article class="timeline-event" role="listitem">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-year">2013</span>
+                <span class="timeline-location">
+                  <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                  Chelyabinsk, Russia
+                </span>
+              </div>
+              <h3 class="timeline-title">The Chelyabinsk Airburst</h3>
+              <p class="timeline-body">
+                On 15 February 2013, a 20-metre asteroid entered the atmosphere
+                at 19 km/s and exploded 23 km above Chelyabinsk. The shockwave
+                shattered windows across six cities, injuring around 1,500
+                people — mostly from flying glass. It was not detected in
+                advance. On the same day, asteroid 2012 DA14 made a separate,
+                predicted close pass at 27,700 km. Two independent events, one
+                day.
+              </p>
+              <div class="timeline-stats">
+                <span class="t-stat"
+                  ><span class="t-stat-label">SIZE</span> ~20 m</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">SPEED</span> 19 km/s</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">INJURED</span> ~1,500</span
+                >
+              </div>
+            </div>
+          </article>
+
+          <article class="timeline-event" role="listitem">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-year">2017</span>
+                <span class="timeline-location">
+                  <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                  Earth Flyby
+                </span>
+              </div>
+              <h3 class="timeline-title">3122 Florence</h3>
+              <p class="timeline-body">
+                At roughly 4.9 km in diameter, 3122 Florence was the largest
+                asteroid to pass this close to Earth since NASA began tracking
+                near-Earth objects. It passed at 7.1 million km — about 18.5
+                lunar distances. Florence will not approach Earth this closely
+                again until after 2500.
+              </p>
+              <div class="timeline-stats">
+                <span class="t-stat"
+                  ><span class="t-stat-label">SIZE</span> 4.9 km</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">MISS DIST</span> 18.5 LD</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">NEXT PASS</span> post-2500</span
+                >
+              </div>
+            </div>
+          </article>
+
+          <article class="timeline-event" role="listitem">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-year">2023</span>
+                <span class="timeline-location">
+                  <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                  Earth Flyby
+                </span>
+              </div>
+              <h3 class="timeline-title">2023 BU — Closer Than Satellites</h3>
+              <p class="timeline-body">
+                Discovered just four days before its closest approach, 2023 BU
+                passed within 3,600 km of Earth's surface — closer than many
+                geostationary satellites. The car-sized asteroid was never a
+                threat (it would have largely burned up), but the short lead
+                time highlighted the detection gap for small, fast-moving
+                objects. One of the closest flybys ever recorded.
+              </p>
+              <div class="timeline-stats">
+                <span class="t-stat"
+                  ><span class="t-stat-label">MISS DIST</span> 3,600 km</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">DETECTED</span> 4 days prior</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">SIZE</span> ~4 m</span
+                >
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="timeline-event timeline-event--future"
+            role="listitem"
+          >
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-year">2029</span>
+                <span class="timeline-location">
+                  <i class="fa-solid fa-clock" aria-hidden="true"></i> Upcoming
+                </span>
+              </div>
+              <h3 class="timeline-title">99942 Apophis — The One to Watch</h3>
+              <p class="timeline-body">
+                On 13 April 2029, asteroid 99942 Apophis — approximately 375
+                metres wide — will pass Earth at roughly 31,000 km. Closer than
+                geostationary satellites, and visible to the naked eye across
+                Europe, Africa and western Asia. NASA's OSIRIS-APEX mission will
+                study it during the flyby. When first discovered in 2004, it
+                briefly held a Torino Scale rating of 4. Refined calculations
+                confirmed no impact risk.
+              </p>
+              <div class="timeline-stats">
+                <span class="t-stat"
+                  ><span class="t-stat-label">SIZE</span> ~375 m</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">MISS DIST</span> 31,000 km</span
+                >
+                <span class="t-stat"
+                  ><span class="t-stat-label">DATE</span> 13 Apr 2029</span
+                >
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== DID YOU KNOW ===== -->
+      <section class="learn-section" aria-labelledby="facts-heading">
+        <h2 class="learn-section-title" id="facts-heading">DID YOU KNOW</h2>
+        <div class="facts-grid">
+          <div class="fact-card">
+            <span class="fact-number">2,300+</span>
+            <p class="fact-desc">
+              potentially hazardous asteroids tracked by NASA
+            </p>
+          </div>
+
+          <div class="fact-card">
+            <span class="fact-number">~30 m</span>
+            <p class="fact-desc">
+              minimum size to cause significant ground damage on atmospheric
+              entry
+            </p>
+          </div>
+
+          <div class="fact-card">
+            <span class="fact-number">73 km/s</span>
+            <p class="fact-desc">
+              maximum physics-bound approach speed — over 210× the speed of
+              sound
+            </p>
+          </div>
+
+          <div class="fact-card">
+            <span class="fact-number">1 in 37</span>
+            <p class="fact-desc">
+              Apophis's peak impact probability in December 2004. It is now 0.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FURTHER READING ===== -->
+      <section class="learn-section" aria-labelledby="reading-heading">
+        <h2 class="learn-section-title" id="reading-heading">
+          FURTHER READING
+        </h2>
+        <div class="reading-grid">
+          <a
+            href="https://cneos.jpl.nasa.gov"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="reading-card"
+            aria-label="NASA CNEOS — opens in new tab"
+          >
+            <div class="reading-icon" aria-hidden="true">
+              <i class="fa-solid fa-satellite"></i>
+            </div>
+            <div class="reading-body">
+              <span class="reading-title">NASA CNEOS</span>
+              <span class="reading-desc"
+                >The official centre for near-Earth object studies — orbits,
+                close approaches, impact risk</span
+              >
+            </div>
+            <i
+              class="fa-solid fa-arrow-up-right-from-square reading-arrow"
+              aria-hidden="true"
+            ></i>
+          </a>
+
+          <a
+            href="https://api.nasa.gov/#NeoWs"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="reading-card"
+            aria-label="NASA NeoWs API — opens in new tab"
+          >
+            <div class="reading-icon" aria-hidden="true">
+              <i class="fa-solid fa-database"></i>
+            </div>
+            <div class="reading-body">
+              <span class="reading-title">NASA NeoWs API</span>
+              <span class="reading-desc"
+                >The data source powering CloseCall's Feed — live close approach
+                data</span
+              >
+            </div>
+            <i
+              class="fa-solid fa-arrow-up-right-from-square reading-arrow"
+              aria-hidden="true"
+            ></i>
+          </a>
+
+          <a
+            href="https://www.esa.int/Safety_Security/Planetary_Defence"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="reading-card"
+            aria-label="ESA Planetary Defence — opens in new tab"
+          >
+            <div class="reading-icon" aria-hidden="true">
+              <i class="fa-solid fa-shield"></i>
+            </div>
+            <div class="reading-body">
+              <span class="reading-title">ESA Planetary Defence</span>
+              <span class="reading-desc"
+                >Europe's asteroid tracking and deflection programme</span
+              >
+            </div>
+            <i
+              class="fa-solid fa-arrow-up-right-from-square reading-arrow"
+              aria-hidden="true"
+            ></i>
+          </a>
+
+          <a
+            href="https://cneos.jpl.nasa.gov/torino_scale.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="reading-card"
+            aria-label="Torino Scale official explanation — opens in new tab"
+          >
+            <div class="reading-icon" aria-hidden="true">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="reading-body">
+              <span class="reading-title">The Torino Scale</span>
+              <span class="reading-desc"
+                >NASA's full explanation of the impact hazard communication
+                scale</span
+              >
+            </div>
+            <i
+              class="fa-solid fa-arrow-up-right-from-square reading-arrow"
+              aria-hidden="true"
+            ></i>
+          </a>
+
+          <a
+            href="https://www.spacereference.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="reading-card"
+            aria-label="Space Reference asteroid browser — opens in new tab"
+          >
+            <div class="reading-icon" aria-hidden="true">
+              <i class="fa-solid fa-globe"></i>
+            </div>
+            <div class="reading-body">
+              <span class="reading-title">Space Reference</span>
+              <span class="reading-desc"
+                >Clean asteroid browser with orbital data and
+                visualisations</span
+              >
+            </div>
+            <i
+              class="fa-solid fa-arrow-up-right-from-square reading-arrow"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Built by Aishwarya Rajmohan &amp; Priyan Baskar · CS5610 · Data from
+        <a href="https://api.nasa.gov/" target="_blank" rel="noopener"
+          >NASA NeoWs</a
+        >
+      </p>
+    </footer>
+
+    <script type="module" src="js/learn.js"></script>
+  </body>
+</html>
