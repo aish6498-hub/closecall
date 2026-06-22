@@ -1,5 +1,23 @@
 import { escHtml, isDivergence, divergeTooltip, formatSize } from "./utils.js";
 
+// ===== HAMBURGER NAV =====
+const hamburger = document.getElementById("navHamburger");
+const navLinks = document.getElementById("navLinks");
+const hamburgerIcon = document.getElementById("hamburgerIcon");
+
+hamburger.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const isOpen = navLinks.classList.toggle("open");
+  hamburger.setAttribute("aria-expanded", isOpen);
+  hamburgerIcon.className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+});
+
+document.addEventListener("click", () => {
+  navLinks.classList.remove("open");
+  hamburger.setAttribute("aria-expanded", false);
+  hamburgerIcon.className = "fa-solid fa-bars";
+});
+
 const API = {
   observations: "/api/observations",
   nasa: (id) => `/api/nasa/neo/${id}`,
@@ -91,7 +109,9 @@ function buildCard(obs) {
       <div class="obs-card-top">
         <div class="obs-card-titles">
           <p class="obs-card-title">${escHtml(obs.title || obs.asteroidName)}</p>
-          <p class="obs-card-subtitle">${escHtml(obs.asteroidName)} · approach: ${escHtml(obs.approachDate)} · ID: ${escHtml(obs.nasaId)}</p>
+          <p class="obs-card-subtitle">
+            <span class="subtitle-name">${escHtml(obs.asteroidName)}</span><span class="subtitle-sep"> · </span><span class="subtitle-approach">approach: ${escHtml(obs.approachDate)}</span><span class="subtitle-sep"> · </span><span class="subtitle-id">ID: ${escHtml(obs.nasaId)}</span>
+          </p>
         </div>
         <div class="badges">
           <span class="badge ${obs.isHazardous ? "badge-hazard" : "badge-safe"}">
@@ -382,7 +402,7 @@ function clearAsteroidFields() {
   document.getElementById("fieldDistance").textContent = "—";
   document.getElementById("fieldSize").textContent = "—";
   document.getElementById("fieldHazard").textContent = "—";
-  formSub.textContent = "— select an asteroid to begin";
+  formSub.textContent = " select an asteroid to begin";
 }
 
 function showDropdownMessage(msg) {
@@ -582,6 +602,10 @@ function updateCardInDom(obs) {
   if (!existing) return;
   const newCard = buildCard(obs);
   existing.replaceWith(newCard);
+  const idx = allObservations.findIndex((o) => o._id === obs._id);
+  if (idx !== -1) allObservations[idx] = obs;
+  activeTag = null;
+  buildTagFilter(allObservations);
 }
 
 // ─── APPROACH TIMELINE ────────────────────────────────────────
