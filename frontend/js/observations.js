@@ -212,6 +212,7 @@ function buildCard(obs) {
 function prependCard(obs) {
   allObservations.unshift(obs);
   buildTagFilter(allObservations);
+  if (statsPanel.style.display === "block") buildStats(allObservations);
   const card = buildCard(obs);
   observationsList.prepend(card);
 }
@@ -245,6 +246,115 @@ function buildTagFilter(observations) {
       renderFilteredCards();
     });
   });
+}
+
+// ─── STATS PANEL ──────────────────────────────────────────────
+
+const statsToggleBtn = document.getElementById("statsToggleBtn");
+const statsPanel = document.getElementById("statsPanel");
+const statsChevron = document.getElementById("statsChevron");
+
+statsToggleBtn.addEventListener("click", () => {
+  const isOpen = statsPanel.style.display === "block";
+  statsPanel.style.display = isOpen ? "none" : "block";
+  statsToggleBtn.setAttribute("aria-expanded", !isOpen);
+  statsChevron.className = isOpen
+    ? "fa-solid fa-chevron-down stats-chevron"
+    : "fa-solid fa-chevron-up stats-chevron";
+  if (!isOpen) buildStats(allObservations);
+});
+
+function buildStats(observations) {
+  if (observations.length === 0) {
+    document.getElementById("statsSummary").innerHTML =
+      `<p class="stats-empty">No observations logged yet.</p>`;
+    document.getElementById("statsSizeChart").innerHTML = "";
+    document.getElementById("statsDiverge").innerHTML = "";
+    return;
+  }
+
+  const total = observations.length;
+  const hazardous = observations.filter((o) => o.isHazardous).length;
+  const safe = total - hazardous;
+  const avgRating = (
+    observations.reduce((sum, o) => sum + (o.dangerRating || 0), 0) / total
+  ).toFixed(1);
+  const diverged = observations.filter((o) =>
+    isDivergence(o.dangerRating, o.isHazardous)
+  ).length;
+
+  document.getElementById("statsSummary").innerHTML = `
+    <div class="stat-card"><span class="stat-num">${total}</span><span class="stat-label">LOGGED</span></div>
+    <div class="stat-card stat-card--hazard"><span class="stat-num">${hazardous}</span><span class="stat-label">HAZARDOUS</span></div>
+    <div class="stat-card stat-card--safe"><span class="stat-num">${safe}</span><span class="stat-label">SAFE</span></div>
+    <div class="stat-card"><span class="stat-num">${avgRating}</span><span class="stat-label">AVG RATING</span></div>
+    <div class="stat-card stat-card--diverge"><span class="stat-num">${diverged}</span><span class="stat-label">DIVERGENCES</span></div>
+  `;
+
+  const buckets = [
+    { label: "< 100 m", count: 0 },
+    { label: "100–500 m", count: 0 },
+    { label: "500 m–1 km", count: 0 },
+    { label: "> 1 km", count: 0 },
+    { label: "Unknown", count: 0 },
+  ];
+  observations.forEach((o) => {
+    const s = o.estimatedSize;
+    if (!s) buckets[4].count++;
+    else if (s < 100) buckets[0].count++;
+    else if (s < 500) buckets[1].count++;
+    else if (s < 1000) buckets[2].count++;
+    else buckets[3].count++;
+  });
+  const maxCount = Math.max(...buckets.map((b) => b.count), 1);
+  document.getElementById("statsSizeChart").innerHTML = `
+    <p class="stats-section-label">SIZE DISTRIBUTION</p>
+    <div class="size-bars">
+      ${buckets.map((b) => `
+        <div class="size-bar-row">
+          <span class="size-bar-label">${b.label}</span>
+          <div class="size-bar-track">
+            <div class="size-bar-fill" style="width:${Math.round((b.count / maxCount) * 100)}%"></div>
+          </div>
+          <span class="size-bar-count">${b.count}</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  const divergences = observations.filter((o) =>
+    isDivergence(o.dangerRating, o.isHazardous)
+  );
+  if (divergences.length === 0) {
+    document.getElementById("statsDiverge").innerHTML = `
+      <p class="stats-section-label">DIVERGENCES</p>
+      <p class="stats-empty">No divergences — your ratings align with NASA on all logged objects.</p>
+    `;
+    return;
+  }
+  document.getElementById("statsDiverge").innerHTML = `
+    <p class="stats-section-label">DIVERGENCES — WHERE YOU DISAGREE WITH NASA</p>
+    <table class="diverge-table" aria-label="Divergence table">
+      <thead>
+        <tr>
+          <th>ASTEROID</th>
+          <th>YOUR RATING</th>
+          <th>NASA STATUS</th>
+          <th>DIVERGENCE</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${divergences.map((o) => `
+          <tr>
+            <td>${escHtml(o.asteroidName)}</td>
+            <td>${o.dangerRating}/5</td>
+            <td>${o.isHazardous ? "HAZARDOUS" : "SAFE"}</td>
+            <td>${o.isHazardous && o.dangerRating <= 2 ? "You rated safer than NASA" : "You rated more dangerous than NASA"}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
 }
 
 function renderFilteredCards() {
@@ -537,6 +647,7 @@ async function deleteObservation(id, cardEl) {
     allObservations = allObservations.filter((o) => o._id !== id);
     activeTag = null;
     buildTagFilter(allObservations);
+    if (statsPanel.style.display === "block") buildStats(allObservations);
     if (observationsList.children.length === 0) {
       emptyState.style.display = "block";
     }
@@ -606,6 +717,7 @@ function updateCardInDom(obs) {
   if (idx !== -1) allObservations[idx] = obs;
   activeTag = null;
   buildTagFilter(allObservations);
+  if (statsPanel.style.display === "block") buildStats(allObservations);
 }
 
 // ─── APPROACH TIMELINE ────────────────────────────────────────

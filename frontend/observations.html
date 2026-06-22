@@ -62,7 +62,7 @@
         <a href="index.html" class="nav-link">FEED</a>
         <a href="watchlist.html" class="nav-link">WATCHLIST</a>
         <a href="observations.html" class="nav-link active">OBSERVATIONS</a>
-        <a href="stats.html" class="nav-link">STATS</a>
+        <a href="learn.html" class="nav-link">LEARN</a>
       </div>
     </nav>
 
@@ -224,7 +224,26 @@
       </section>
 
       <!-- OBSERVATIONS LIST -->
-      <h2 class="list-title">YOUR OBSERVATIONS</h2>
+      <div class="list-header">
+        <h2 class="list-title">YOUR OBSERVATIONS</h2>
+        <button class="stats-toggle-btn" id="statsToggleBtn" aria-expanded="false" aria-controls="statsPanel">
+          <i class="fa-solid fa-chart-bar" aria-hidden="true"></i> YOUR STATS
+          <i class="fa-solid fa-chevron-down stats-chevron" id="statsChevron" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <!-- STATS PANEL -->
+      <div class="stats-panel" id="statsPanel" style="display:none">
+        <div class="stats-summary" id="statsSummary">
+          <!-- injected by observations.js -->
+        </div>
+        <div class="stats-size-chart" id="statsSizeChart">
+          <!-- injected by observations.js -->
+        </div>
+        <div class="stats-diverge" id="statsDiverge">
+          <!-- injected by observations.js -->
+        </div>
+      </div>
 
       <div class="tag-filter" id="tagFilter">
         <!-- injected by observations.js -->
