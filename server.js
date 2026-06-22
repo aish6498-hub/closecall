@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import observationsRouter from "./routes/observations.js";
 import nasaRouter from "./routes/nasa.js";
+import watchlistRouter from "./routes/watchlist.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use("/api", (req, res, next) => {
 });
 app.use("/api/observations", observationsRouter);
 app.use("/api/nasa", nasaRouter);
+app.use("/api/watchlist", watchlistRouter);
 
 // 3. Static Files
 
