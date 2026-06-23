@@ -255,6 +255,29 @@
   cursor: default;
 }
 
+.action-cell {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.log-btn {
+  background: transparent;
+  border: 0.5px solid var(--color-border);
+  color: var(--color-muted);
+  border-radius: var(--radius-md);
+  padding: 9px 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.log-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
 @media (max-width: 760px) {
   .stat-cards {
     grid-template-columns: repeat(2, 1fr);

@@ -184,11 +184,12 @@ function renderRow(obj) {
     </td>
     <td>${formatDiameter(obj.diameterMinM, obj.diameterMaxM)}</td>
     <td>${formatVelocity(obj.velocityKms)}</td>
-    <td>
+    <td class="action-cell">
       <button class="watch-btn ${saved ? "is-saved" : ""}"
         data-id="${id}" ${saved ? "disabled" : ""}>
         ${saved ? "Saved" : "Watch"}
       </button>
+      <a class="log-btn" href="observations.html?nasaId=${id}">Log</a>
     </td>
   `;
   return tr;
