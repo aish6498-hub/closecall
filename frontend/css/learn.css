@@ -213,6 +213,70 @@
   max-width: 680px;
 }
 
+/* ===== HOW TO USE ===== */
+.howto-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 24px;
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.howto-step {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 24px 28px;
+  border-bottom: 0.5px solid var(--color-border2);
+}
+
+.howto-step:last-child {
+  border-bottom: none;
+}
+
+.howto-num {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-primary);
+  opacity: 0.5;
+  flex-shrink: 0;
+  min-width: 36px;
+  line-height: 1.2;
+}
+
+.howto-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.howto-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--color-text);
+}
+
+.howto-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-dim);
+  line-height: 1.8;
+}
+
+.howto-link {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.howto-link:hover {
+  text-decoration: underline;
+}
+
 /* ===== KEY CONCEPTS ===== */
 .concept-grid {
   display: grid;

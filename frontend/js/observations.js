@@ -29,6 +29,7 @@ let selectedAsteroid = null;
 let selectedRating = null;
 let editRating = null;
 let activeTag = null;
+let activeSearch = "";
 let allObservations = [];
 let currentPage = 1;
 let pageSize = 20;
@@ -67,6 +68,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   checkUrlForAsteroid();
   bindPaginationControls();
+
+  const obsNameSearch = document.getElementById("obsNameSearch");
+  if (obsNameSearch) {
+    obsNameSearch.addEventListener("input", () => {
+      activeSearch = obsNameSearch.value.trim();
+      currentPage = 1;
+      renderFilteredCards();
+    });
+  }
 });
 
 function bindPaginationControls() {
@@ -163,7 +173,7 @@ function buildCard(obs) {
       <div class="obs-stats">
         <div class="obs-stat">
           <div class="obs-stat-label">MISS DIST</div>
-          <div class="obs-stat-value">${escHtml(obs.missDistance)}</div>
+          <div class="obs-stat-value">${escHtml(obs.missDistance)}${(() => { const km = parseFloat((obs.missDistance || "").replace(/,/g, "")); return km > 0 ? `<span class="obs-stat-ld"> ≈ ${(km / 384400).toFixed(2)} LD</span>` : ""; })()}</div>
         </div>
         <div class="obs-stat">
           <div class="obs-stat-label">EST. SIZE</div>
@@ -398,9 +408,12 @@ function buildStats(observations) {
 }
 
 function renderFilteredCards() {
-  const filtered = activeTag
-    ? allObservations.filter((o) => o.tag === activeTag)
-    : allObservations;
+  const q = activeSearch.toLowerCase();
+  const filtered = allObservations.filter((o) => {
+    const matchTag = !activeTag || o.tag === activeTag;
+    const matchSearch = !q || (o.asteroidName || "").toLowerCase().includes(q);
+    return matchTag && matchSearch;
+  });
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
