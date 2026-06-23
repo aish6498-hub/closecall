@@ -24,7 +24,7 @@ Full Stack Developer · Masters Student at Northeastern University
 ## Deployment
 
 The app is deployed at:
-[https://closecall.onrender.com](https://closecall.onrender.com)
+[https://closecall-fcpt.onrender.com/](https://closecall-fcpt.onrender.com/)
 
 ---
 
@@ -62,6 +62,9 @@ _Aishwarya Rajmohan_
 
 Feed page — live asteroid table sorted by miss distance:
 ![Feed page](./frontend/assets/screenshots/feed.png)
+
+Watchlist page - saved asteroids with live next-approach lookup
+![Watchlist page](./frontend/assets/screenshots/watchlist.png)
 
 Observations page — personal log with search, tags, and divergence badges:
 ![Observations page](./frontend/assets/screenshots/observations.gif)
