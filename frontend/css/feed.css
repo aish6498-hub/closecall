@@ -499,7 +499,11 @@
   }
 }
 
-.nav,
+.nav {
+  position: relative;
+  z-index: 100;
+}
+
 .page {
   position: relative;
   z-index: 1;
