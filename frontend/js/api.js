@@ -45,6 +45,36 @@ export async function getNeo(id) {
   };
 }
 
+// --- NASA single NEO (raw, full response) ---
+export function getNeoRaw(id) {
+  return request(`${NASA_BASE}/neo/${id}`);
+}
+
+// --- Observations CRUD ---
+export function getObservations() {
+  return request("/api/observations");
+}
+
+export function createObservation(payload) {
+  return request("/api/observations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updateObservation(id, payload) {
+  return request(`/api/observations/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteObservation(id) {
+  return request(`/api/observations/${id}`, { method: "DELETE" });
+}
+
 // --- Watchlist CRUD ---
 export function getWatchlist() {
   return request("/api/watchlist");

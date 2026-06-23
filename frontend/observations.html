@@ -47,13 +47,22 @@
     />
   </head>
   <body>
+    <div class="space-bg" aria-hidden="true"></div>
     <nav class="nav">
+      <button
+        class="nav-hamburger"
+        id="navHamburger"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-bars" id="hamburgerIcon"></i>
+      </button>
       <span class="nav-logo">CLOSECALL</span>
-      <div class="nav-links">
+      <div class="nav-links" id="navLinks">
         <a href="index.html" class="nav-link">FEED</a>
         <a href="watchlist.html" class="nav-link">WATCHLIST</a>
         <a href="observations.html" class="nav-link active">OBSERVATIONS</a>
-        <a href="stats.html" class="nav-link">STATS</a>
+        <a href="learn.html" class="nav-link">LEARN</a>
       </div>
     </nav>
 
@@ -69,12 +78,12 @@
         >
           <div class="form-header-left">
             <span class="form-header-title">LOG OBSERVATION</span>
-            <span class="form-header-sub" id="formSub"
-              >— select an asteroid to begin</span
+            <span class="form-header-sub" id="formSub">
+              select an asteroid to begin</span
             >
           </div>
           <i
-            class="fa-solid fa-chevron-up form-chevron"
+            class="fa-solid fa-chevron-down form-chevron"
             id="formChevron"
             aria-hidden="true"
           ></i>
@@ -215,10 +224,78 @@
       </section>
 
       <!-- OBSERVATIONS LIST -->
-      <h2 class="list-title">YOUR OBSERVATIONS</h2>
+      <div class="list-header">
+        <h2 class="list-title">YOUR OBSERVATIONS</h2>
+        <div class="list-header-controls">
+          <div class="page-size-selector" aria-label="Records per page">
+            <span class="page-size-label">SHOW</span>
+            <button class="page-size-btn" data-size="10">10</button>
+            <button class="page-size-btn active" data-size="20">20</button>
+            <button class="page-size-btn" data-size="50">50</button>
+          </div>
+          <button
+            class="stats-toggle-btn"
+            id="statsToggleBtn"
+            aria-expanded="false"
+            aria-controls="statsPanel"
+          >
+            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i> YOUR STATS
+            <i
+              class="fa-solid fa-chevron-down stats-chevron"
+              id="statsChevron"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- STATS PANEL -->
+      <div class="stats-panel" id="statsPanel" style="display: none">
+        <div class="stats-summary" id="statsSummary">
+          <!-- injected by observations.js -->
+        </div>
+        <div class="stats-size-chart" id="statsSizeChart">
+          <!-- injected by observations.js -->
+        </div>
+        <div class="stats-diverge" id="statsDiverge">
+          <!-- injected by observations.js -->
+        </div>
+      </div>
+
+      <div class="obs-search-row">
+        <input
+          type="search"
+          id="obsNameSearch"
+          class="obs-name-search"
+          placeholder="Search by asteroid name…"
+          autocomplete="off"
+          aria-label="Search observations by asteroid name"
+        />
+      </div>
 
       <div class="tag-filter" id="tagFilter">
         <!-- injected by observations.js -->
+      </div>
+
+      <div class="pagination-bar" id="paginationBar" style="display: none">
+        <span class="pagination-info" id="paginationInfo"></span>
+        <div class="pagination-btns">
+          <button
+            class="pagination-btn"
+            id="prevPageBtn"
+            aria-label="Previous page"
+          >
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i> PREV
+          </button>
+          <span class="pagination-pages" id="paginationPages"></span>
+          <button
+            class="pagination-btn"
+            id="nextPageBtn"
+            aria-label="Next page"
+          >
+            NEXT <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
 
       <div id="observationsList">
