@@ -19,7 +19,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "ready:check": "npm run lint:fix && npm run format:check"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
