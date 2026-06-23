@@ -318,7 +318,9 @@
   letter-spacing: 1.5px;
   padding: 7px 14px;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
   white-space: nowrap;
 }
 
@@ -361,9 +363,15 @@
   gap: 6px;
 }
 
-.stat-card--hazard { border-color: var(--color-hazard-border); }
-.stat-card--safe { border-color: var(--color-safe-border); }
-.stat-card--diverge { border-color: var(--color-diverge-border); }
+.stat-card--hazard {
+  border-color: var(--color-hazard-border);
+}
+.stat-card--safe {
+  border-color: var(--color-safe-border);
+}
+.stat-card--diverge {
+  border-color: var(--color-diverge-border);
+}
 
 .stat-num {
   font-family: var(--font-display);
@@ -372,9 +380,15 @@
   color: var(--color-text);
 }
 
-.stat-card--hazard .stat-num { color: var(--color-hazard); }
-.stat-card--safe .stat-num { color: var(--color-safe); }
-.stat-card--diverge .stat-num { color: var(--color-diverge); }
+.stat-card--hazard .stat-num {
+  color: var(--color-hazard);
+}
+.stat-card--safe .stat-num {
+  color: var(--color-safe);
+}
+.stat-card--diverge .stat-num {
+  color: var(--color-diverge);
+}
 
 .stat-label {
   font-family: var(--font-display);
