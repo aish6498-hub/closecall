@@ -533,6 +533,15 @@
   padding-top: 20px;
 }
 
+.stats-count {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--color-muted);
+  font-weight: normal;
+  margin-left: 8px;
+}
+
 .size-bars {
   display: flex;
   flex-direction: column;

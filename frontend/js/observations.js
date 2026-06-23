@@ -366,26 +366,28 @@ function buildStats(observations) {
     `;
     return;
   }
+  const shown = divergences.slice(0, 5);
+  const extra = divergences.length - shown.length;
   document.getElementById("statsDiverge").innerHTML = `
-    <p class="stats-section-label">DIVERGENCES — WHERE YOU DISAGREE WITH NASA</p>
+    <p class="stats-section-label">DIVERGENCES — WHERE YOU DISAGREE WITH NASA <span class="stats-count">${divergences.length} total${extra > 0 ? `, showing top 5` : ""}</span></p>
     <table class="diverge-table" aria-label="Divergence table">
       <thead>
         <tr>
           <th>ASTEROID</th>
           <th>YOUR RATING</th>
           <th>NASA STATUS</th>
-          <th>DIVERGENCE</th>
+          <th>YOUR NOTES</th>
         </tr>
       </thead>
       <tbody>
-        ${divergences
+        ${shown
           .map(
             (o) => `
           <tr>
             <td>${escHtml(o.asteroidName)}</td>
             <td>${o.dangerRating}/5</td>
             <td>${o.isHazardous ? "HAZARDOUS" : "SAFE"}</td>
-            <td>${o.isHazardous && o.dangerRating <= 2 ? "You rated safer than NASA" : "You rated more dangerous than NASA"}</td>
+            <td class="diverge-notes">${o.notes ? escHtml(o.notes) : '<span class="diverge-no-notes">—</span>'}</td>
           </tr>
         `
           )
