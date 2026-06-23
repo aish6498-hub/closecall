@@ -4,6 +4,7 @@ import {
   updateWatchlistItem,
   deleteWatchlistItem,
 } from "./api.js";
+import "./nav.js";
 import { escHtml } from "./utils.js";
 import { ldClass, formatLD, formatVelocity, formatDate } from "./format.js";
 

@@ -1,15 +1,22 @@
 import { escHtml, isDivergence, divergeTooltip, formatSize } from "./utils.js";
+import {
+  getObservations,
+  createObservation,
+  updateObservation,
+  deleteObservation as apiDeleteObservation,
+  getNeoRaw,
+} from "./api.js";
 
-const API = {
-  observations: "/api/observations",
-  nasa: (id) => `/api/nasa/neo/${id}`,
-};
+import "./nav.js";
 
 let selectedAsteroid = null;
 let selectedRating = null;
 let editRating = null;
 let activeTag = null;
+let activeSearch = "";
 let allObservations = [];
+let currentPage = 1;
+let pageSize = 20;
 
 // ─── DOM REFS ─────────────────────────────────────────────────
 
@@ -44,7 +51,43 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("editDangerRating").value = val;
   });
   checkUrlForAsteroid();
+  bindPaginationControls();
+
+  const obsNameSearch = document.getElementById("obsNameSearch");
+  if (obsNameSearch) {
+    obsNameSearch.addEventListener("input", () => {
+      activeSearch = obsNameSearch.value.trim();
+      currentPage = 1;
+      renderFilteredCards();
+    });
+  }
 });
+
+function bindPaginationControls() {
+  document.querySelectorAll(".page-size-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".page-size-btn")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      pageSize = Number(btn.dataset.size);
+      currentPage = 1;
+      renderFilteredCards();
+    });
+  });
+
+  document.getElementById("prevPageBtn").addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderFilteredCards();
+    }
+  });
+
+  document.getElementById("nextPageBtn").addEventListener("click", () => {
+    currentPage++;
+    renderFilteredCards();
+  });
+}
 
 // ─── URL CHECK ────────────────────────────────────────────────
 
@@ -61,15 +104,13 @@ async function checkUrlForAsteroid() {
 
 async function loadObservations() {
   try {
-    const res = await fetch(API.observations);
-    if (!res.ok) throw new Error("Failed to load");
-    const data = await res.json();
+    const data = await getObservations();
     allObservations = data;
     if (data.length === 0) {
       emptyState.style.display = "block";
     } else {
       buildTagFilter(data);
-      data.forEach((obs) => appendCard(obs));
+      renderFilteredCards();
     }
   } catch {
     observationsList.innerHTML = `<p class="load-error">Could not load observations. Try refreshing.</p>`;
@@ -91,7 +132,9 @@ function buildCard(obs) {
       <div class="obs-card-top">
         <div class="obs-card-titles">
           <p class="obs-card-title">${escHtml(obs.title || obs.asteroidName)}</p>
-          <p class="obs-card-subtitle">${escHtml(obs.asteroidName)} · approach: ${escHtml(obs.approachDate)} · ID: ${escHtml(obs.nasaId)}</p>
+          <p class="obs-card-subtitle">
+            <span class="subtitle-name">${escHtml(obs.asteroidName)}</span><span class="subtitle-sep"> · </span><span class="subtitle-approach">approach: ${escHtml(obs.approachDate)}</span><span class="subtitle-sep"> · </span><span class="subtitle-id">ID: ${escHtml(obs.nasaId)}</span>
+          </p>
         </div>
         <div class="badges">
           <span class="badge ${obs.isHazardous ? "badge-hazard" : "badge-safe"}">
@@ -114,7 +157,12 @@ function buildCard(obs) {
       <div class="obs-stats">
         <div class="obs-stat">
           <div class="obs-stat-label">MISS DIST</div>
-          <div class="obs-stat-value">${escHtml(obs.missDistance)}</div>
+          <div class="obs-stat-value">${escHtml(obs.missDistance)}${(() => {
+            const km = parseFloat((obs.missDistance || "").replace(/,/g, ""));
+            return km > 0
+              ? `<span class="obs-stat-ld"> ≈ ${(km / 384400).toFixed(2)} LD</span>`
+              : "";
+          })()}</div>
         </div>
         <div class="obs-stat">
           <div class="obs-stat-label">EST. SIZE</div>
@@ -175,7 +223,7 @@ function buildCard(obs) {
     .addEventListener("click", () => openEditModal(obs));
   card
     .querySelector(".delete-btn")
-    .addEventListener("click", () => deleteObservation(obs._id, card));
+    .addEventListener("click", () => deleteObservation(obs._id));
 
   card.querySelector(".goto-now-btn").addEventListener("click", () => {
     const scroll = document.getElementById(`scroll-${obs._id}`);
@@ -191,9 +239,10 @@ function buildCard(obs) {
 
 function prependCard(obs) {
   allObservations.unshift(obs);
+  currentPage = 1;
   buildTagFilter(allObservations);
-  const card = buildCard(obs);
-  observationsList.prepend(card);
+  if (statsPanel.style.display === "block") buildStats(allObservations);
+  renderFilteredCards();
 }
 
 function appendCard(obs) {
@@ -222,21 +271,177 @@ function buildTagFilter(observations) {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       activeTag = btn.dataset.tag === "all" ? null : btn.dataset.tag;
+      currentPage = 1;
       renderFilteredCards();
     });
   });
 }
 
-function renderFilteredCards() {
-  observationsList.innerHTML = "";
-  const filtered = activeTag
-    ? allObservations.filter((o) => o.tag === activeTag)
-    : allObservations;
-  if (filtered.length === 0) {
-    observationsList.innerHTML = `<p class="load-error">No observations with tag "${activeTag}".</p>`;
+// ─── STATS PANEL ──────────────────────────────────────────────
+
+const statsToggleBtn = document.getElementById("statsToggleBtn");
+const statsPanel = document.getElementById("statsPanel");
+const statsChevron = document.getElementById("statsChevron");
+
+statsToggleBtn.addEventListener("click", () => {
+  const isOpen = statsPanel.style.display === "block";
+  statsPanel.style.display = isOpen ? "none" : "block";
+  statsToggleBtn.setAttribute("aria-expanded", !isOpen);
+  statsChevron.className = isOpen
+    ? "fa-solid fa-chevron-down stats-chevron"
+    : "fa-solid fa-chevron-up stats-chevron";
+  if (!isOpen) buildStats(allObservations);
+});
+
+function buildStats(observations) {
+  if (observations.length === 0) {
+    document.getElementById("statsSummary").innerHTML =
+      `<p class="stats-empty">No observations logged yet.</p>`;
+    document.getElementById("statsSizeChart").innerHTML = "";
+    document.getElementById("statsDiverge").innerHTML = "";
     return;
   }
-  filtered.forEach((obs) => appendCard(obs));
+
+  const total = observations.length;
+  const hazardous = observations.filter((o) => o.isHazardous).length;
+  const safe = total - hazardous;
+  const avgRating = (
+    observations.reduce((sum, o) => sum + (o.dangerRating || 0), 0) / total
+  ).toFixed(1);
+  const diverged = observations.filter((o) =>
+    isDivergence(o.dangerRating, o.isHazardous)
+  ).length;
+
+  document.getElementById("statsSummary").innerHTML = `
+    <div class="stat-card"><span class="stat-num">${total}</span><span class="stat-label">LOGGED</span></div>
+    <div class="stat-card stat-card--hazard"><span class="stat-num">${hazardous}</span><span class="stat-label">HAZARDOUS</span></div>
+    <div class="stat-card stat-card--safe"><span class="stat-num">${safe}</span><span class="stat-label">SAFE</span></div>
+    <div class="stat-card"><span class="stat-num">${avgRating}</span><span class="stat-label">AVG RATING</span></div>
+    <div class="stat-card stat-card--diverge"><span class="stat-num">${diverged}</span><span class="stat-label">DIVERGENCES</span></div>
+  `;
+
+  const buckets = [
+    { label: "< 100 m", count: 0 },
+    { label: "100–500 m", count: 0 },
+    { label: "500 m–1 km", count: 0 },
+    { label: "> 1 km", count: 0 },
+    { label: "Unknown", count: 0 },
+  ];
+  observations.forEach((o) => {
+    const s = o.estimatedSize;
+    if (!s) buckets[4].count++;
+    else if (s < 100) buckets[0].count++;
+    else if (s < 500) buckets[1].count++;
+    else if (s < 1000) buckets[2].count++;
+    else buckets[3].count++;
+  });
+  const maxCount = Math.max(...buckets.map((b) => b.count), 1);
+  document.getElementById("statsSizeChart").innerHTML = `
+    <p class="stats-section-label">SIZE DISTRIBUTION</p>
+    <div class="size-bars">
+      ${buckets
+        .map(
+          (b) => `
+        <div class="size-bar-row">
+          <span class="size-bar-label">${b.label}</span>
+          <div class="size-bar-track">
+            <div class="size-bar-fill" style="width:${Math.round((b.count / maxCount) * 100)}%"></div>
+          </div>
+          <span class="size-bar-count">${b.count}</span>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+
+  const divergences = observations.filter((o) =>
+    isDivergence(o.dangerRating, o.isHazardous)
+  );
+  if (divergences.length === 0) {
+    document.getElementById("statsDiverge").innerHTML = `
+      <p class="stats-section-label">DIVERGENCES</p>
+      <p class="stats-empty">No divergences — your ratings align with NASA on all logged objects.</p>
+    `;
+    return;
+  }
+  const shown = divergences.slice(0, 5);
+  const extra = divergences.length - shown.length;
+  document.getElementById("statsDiverge").innerHTML = `
+    <p class="stats-section-label">DIVERGENCES — WHERE YOU DISAGREE WITH NASA <span class="stats-count">${divergences.length} total${extra > 0 ? `, showing top 5` : ""}</span></p>
+    <table class="diverge-table" aria-label="Divergence table">
+      <thead>
+        <tr>
+          <th>ASTEROID</th>
+          <th>YOUR RATING</th>
+          <th>NASA STATUS</th>
+          <th>YOUR NOTES</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${shown
+          .map(
+            (o) => `
+          <tr>
+            <td>${escHtml(o.asteroidName)}</td>
+            <td>${o.dangerRating}/5</td>
+            <td>${o.isHazardous ? "HAZARDOUS" : "SAFE"}</td>
+            <td class="diverge-notes">${o.notes ? escHtml(o.notes) : '<span class="diverge-no-notes">—</span>'}</td>
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderFilteredCards() {
+  const q = activeSearch.toLowerCase();
+  const filtered = allObservations.filter((o) => {
+    const matchTag = !activeTag || o.tag === activeTag;
+    const matchSearch = !q || (o.asteroidName || "").toLowerCase().includes(q);
+    return matchTag && matchSearch;
+  });
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * pageSize;
+  const end = Math.min(start + pageSize, total);
+  const pageItems = filtered.slice(start, end);
+
+  observationsList.innerHTML = "";
+  if (total === 0) {
+    observationsList.innerHTML = activeTag
+      ? `<p class="load-error">No observations with tag "${activeTag}".</p>`
+      : "";
+  } else {
+    pageItems.forEach((obs) => appendCard(obs));
+  }
+
+  buildPagination(total, start, end, totalPages);
+  emptyState.style.display = total === 0 && !activeTag ? "block" : "none";
+}
+
+function buildPagination(total, start, end, totalPages) {
+  const bar = document.getElementById("paginationBar");
+  const info = document.getElementById("paginationInfo");
+  const pages = document.getElementById("paginationPages");
+  const prevBtn = document.getElementById("prevPageBtn");
+  const nextBtn = document.getElementById("nextPageBtn");
+
+  if (total <= 10) {
+    bar.style.display = "none";
+    return;
+  }
+
+  bar.style.display = "flex";
+  info.textContent = `${start + 1}–${end} of ${total}`;
+  pages.textContent = `${currentPage} / ${totalPages}`;
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === totalPages;
 }
 
 // ─── FORM TOGGLE ──────────────────────────────────────────────
@@ -302,19 +507,11 @@ async function searchAsteroid(query) {
 async function loadAsteroidById(nasaId) {
   setFieldsLoading(true);
   try {
-    const res = await fetch(API.nasa(nasaId));
-    if (!res.ok) {
-      showDropdownMessage(
-        "Asteroid not found. Check the NASA ID and try again."
-      );
-      clearAsteroidFields();
-      return;
-    }
-    const data = await res.json();
+    const data = await getNeoRaw(nasaId);
     populateAsteroidFields(data);
     closeDropdown();
   } catch {
-    showDropdownMessage("Could not reach NASA. Try again in a moment.");
+    showDropdownMessage("Asteroid not found. Check the NASA ID and try again.");
     clearAsteroidFields();
   }
 }
@@ -382,7 +579,7 @@ function clearAsteroidFields() {
   document.getElementById("fieldDistance").textContent = "—";
   document.getElementById("fieldSize").textContent = "—";
   document.getElementById("fieldHazard").textContent = "—";
-  formSub.textContent = "— select an asteroid to begin";
+  formSub.textContent = " select an asteroid to begin";
 }
 
 function showDropdownMessage(msg) {
@@ -452,27 +649,12 @@ function bindFormEvents() {
     };
 
     try {
-      const res = await fetch(API.observations, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      console.log("POST status:", res.status);
-
-      if (!res.ok) {
-        showFormError("Failed to save. Please try again.");
-        return;
-      }
-
-      const saved = await res.json();
-      console.log("saved:", saved);
+      const saved = await createObservation(payload);
       prependCard(saved);
       resetForm();
       closeForm();
       emptyState.style.display = "none";
-    } catch (err) {
-      console.error("POST catch error:", err);
+    } catch {
       showFormError("Could not connect. Please try again.");
     }
   });
@@ -504,22 +686,19 @@ function showFormError(msg) {
 
 // ─── DELETE ───────────────────────────────────────────────────
 
-async function deleteObservation(id, cardEl) {
+async function deleteObservation(id) {
   const confirmed = window.confirm(
     "Delete this observation? This cannot be undone."
   );
   if (!confirmed) return;
 
   try {
-    const res = await fetch(`${API.observations}/${id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error("Delete failed");
-    cardEl.remove();
+    await apiDeleteObservation(id);
     allObservations = allObservations.filter((o) => o._id !== id);
     activeTag = null;
     buildTagFilter(allObservations);
-    if (observationsList.children.length === 0) {
-      emptyState.style.display = "block";
-    }
+    if (statsPanel.style.display === "block") buildStats(allObservations);
+    renderFilteredCards();
   } catch {
     alert("Could not delete. Please try again.");
   }
@@ -561,14 +740,7 @@ function bindModalEvents() {
     };
 
     try {
-      const res = await fetch(`${API.observations}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) throw new Error("Update failed");
-      const updated = await res.json();
+      const updated = await updateObservation(id, payload);
       updateCardInDom(updated);
       closeEditModal();
     } catch {
@@ -582,6 +754,11 @@ function updateCardInDom(obs) {
   if (!existing) return;
   const newCard = buildCard(obs);
   existing.replaceWith(newCard);
+  const idx = allObservations.findIndex((o) => o._id === obs._id);
+  if (idx !== -1) allObservations[idx] = obs;
+  activeTag = null;
+  buildTagFilter(allObservations);
+  if (statsPanel.style.display === "block") buildStats(allObservations);
 }
 
 // ─── APPROACH TIMELINE ────────────────────────────────────────
@@ -608,9 +785,7 @@ async function toggleTimeline(obsId, nasaId, btn) {
     '<div class="timeline-line"></div><p class="timeline-loading"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> loading passes...</p>';
 
   try {
-    const res = await fetch(API.nasa(nasaId));
-    if (!res.ok) throw new Error("NASA fetch failed");
-    const data = await res.json();
+    const data = await getNeoRaw(nasaId);
     track.innerHTML = '<div class="timeline-line"></div>';
     renderTimeline(track, data.close_approach_data || []);
     track.dataset.loaded = "true";
