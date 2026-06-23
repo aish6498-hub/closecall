@@ -5,8 +5,6 @@ import nasaRouter from "./routes/nasa.js";
 import watchlistRouter from "./routes/watchlist.js";
 dotenv.config();
 
-console.log("Hello from backend!");
-
 const PORT = process.env.PORT || 3000;
 const app = express();
 

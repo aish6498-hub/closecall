@@ -6,12 +6,9 @@ A full-stack asteroid threat dashboard that pulls live data from NASA's NeoWs AP
 
 ## Authors
 
-**Aishwarya Rajmohan** — Observations page, Learn page, backend API & DB layer, code organization
-Full Stack Developer · Masters Student at Northeastern University
-[LinkedIn](https://linkedin.com/in/aishwaryamohan1698) · [GitHub](https://github.com/aish6498-hub)
+**Aishwarya Rajmohan** [LinkedIn](https://linkedin.com/in/aishwaryamohan1698) · [GitHub](https://github.com/aish6498-hub) - Observations page, Learn page, backend API & DB layer (observations, nasa routes), code organization
 
-**Priyan Baskar** — Feed page, Watchlist page, NASA NeoWs integration
-Full Stack Developer · Masters Student at Northeastern University
+**Priyan Baskar** [LinkedIn](https://www.linkedin.com/in/priyan-baskar-a1263227a/) · [GitHub](https://github.com/priyan-b) - Feed page, Watchlist page, NASA NeoWs integration and API proxy
 
 ---
 
