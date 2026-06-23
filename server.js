@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import observationsRouter from "./routes/observations.js";
 import nasaRouter from "./routes/nasa.js";
 import watchlistRouter from "./routes/watchlist.js";
-
 dotenv.config();
 
 console.log("Hello from backend!");
