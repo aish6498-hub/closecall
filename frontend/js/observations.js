@@ -7,23 +7,7 @@ import {
   getNeoRaw,
 } from "./api.js";
 
-// ===== HAMBURGER NAV =====
-const hamburger = document.getElementById("navHamburger");
-const navLinks = document.getElementById("navLinks");
-const hamburgerIcon = document.getElementById("hamburgerIcon");
-
-hamburger.addEventListener("click", (e) => {
-  e.stopPropagation();
-  const isOpen = navLinks.classList.toggle("open");
-  hamburger.setAttribute("aria-expanded", isOpen);
-  hamburgerIcon.className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars";
-});
-
-document.addEventListener("click", () => {
-  navLinks.classList.remove("open");
-  hamburger.setAttribute("aria-expanded", false);
-  hamburgerIcon.className = "fa-solid fa-bars";
-});
+import "./nav.js";
 
 let selectedAsteroid = null;
 let selectedRating = null;
@@ -173,7 +157,12 @@ function buildCard(obs) {
       <div class="obs-stats">
         <div class="obs-stat">
           <div class="obs-stat-label">MISS DIST</div>
-          <div class="obs-stat-value">${escHtml(obs.missDistance)}${(() => { const km = parseFloat((obs.missDistance || "").replace(/,/g, "")); return km > 0 ? `<span class="obs-stat-ld"> ≈ ${(km / 384400).toFixed(2)} LD</span>` : ""; })()}</div>
+          <div class="obs-stat-value">${escHtml(obs.missDistance)}${(() => {
+            const km = parseFloat((obs.missDistance || "").replace(/,/g, ""));
+            return km > 0
+              ? `<span class="obs-stat-ld"> ≈ ${(km / 384400).toFixed(2)} LD</span>`
+              : "";
+          })()}</div>
         </div>
         <div class="obs-stat">
           <div class="obs-stat-label">EST. SIZE</div>
