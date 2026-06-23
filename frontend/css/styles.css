@@ -75,6 +75,13 @@ body {
   background-color: var(--color-bg);
   font-family: var(--font-body);
   color: var(--color-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
 }
 
 /* ===== NAV ===== */

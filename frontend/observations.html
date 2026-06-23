@@ -226,19 +226,27 @@
       <!-- OBSERVATIONS LIST -->
       <div class="list-header">
         <h2 class="list-title">YOUR OBSERVATIONS</h2>
-        <button
-          class="stats-toggle-btn"
-          id="statsToggleBtn"
-          aria-expanded="false"
-          aria-controls="statsPanel"
-        >
-          <i class="fa-solid fa-chart-bar" aria-hidden="true"></i> YOUR STATS
-          <i
-            class="fa-solid fa-chevron-down stats-chevron"
-            id="statsChevron"
-            aria-hidden="true"
-          ></i>
-        </button>
+        <div class="list-header-controls">
+          <div class="page-size-selector" aria-label="Records per page">
+            <span class="page-size-label">SHOW</span>
+            <button class="page-size-btn" data-size="10">10</button>
+            <button class="page-size-btn active" data-size="20">20</button>
+            <button class="page-size-btn" data-size="50">50</button>
+          </div>
+          <button
+            class="stats-toggle-btn"
+            id="statsToggleBtn"
+            aria-expanded="false"
+            aria-controls="statsPanel"
+          >
+            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i> YOUR STATS
+            <i
+              class="fa-solid fa-chevron-down stats-chevron"
+              id="statsChevron"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
       </div>
 
       <!-- STATS PANEL -->
@@ -260,6 +268,19 @@
 
       <div id="observationsList">
         <!-- Cards injected by observations.js -->
+      </div>
+
+      <div class="pagination-bar" id="paginationBar" style="display: none">
+        <span class="pagination-info" id="paginationInfo"></span>
+        <div class="pagination-btns">
+          <button class="pagination-btn" id="prevPageBtn" aria-label="Previous page">
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i> PREV
+          </button>
+          <span class="pagination-pages" id="paginationPages"></span>
+          <button class="pagination-btn" id="nextPageBtn" aria-label="Next page">
+            NEXT <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
 
       <div class="empty-state" id="emptyState" style="display: none">

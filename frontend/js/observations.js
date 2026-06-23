@@ -28,6 +28,8 @@ let selectedRating = null;
 let editRating = null;
 let activeTag = null;
 let allObservations = [];
+let currentPage = 1;
+let pageSize = 20;
 
 // ─── DOM REFS ─────────────────────────────────────────────────
 
@@ -62,7 +64,36 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("editDangerRating").value = val;
   });
   checkUrlForAsteroid();
+  bindPaginationControls();
 });
+
+function bindPaginationControls() {
+  document.querySelectorAll(".page-size-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".page-size-btn")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      pageSize = Number(btn.dataset.size);
+      currentPage = 1;
+      renderFilteredCards();
+    });
+  });
+
+  document.getElementById("prevPageBtn").addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderFilteredCards();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  document.getElementById("nextPageBtn").addEventListener("click", () => {
+    currentPage++;
+    renderFilteredCards();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
 
 // ─── URL CHECK ────────────────────────────────────────────────
 
@@ -87,7 +118,7 @@ async function loadObservations() {
       emptyState.style.display = "block";
     } else {
       buildTagFilter(data);
-      data.forEach((obs) => appendCard(obs));
+      renderFilteredCards();
     }
   } catch {
     observationsList.innerHTML = `<p class="load-error">Could not load observations. Try refreshing.</p>`;
@@ -195,7 +226,7 @@ function buildCard(obs) {
     .addEventListener("click", () => openEditModal(obs));
   card
     .querySelector(".delete-btn")
-    .addEventListener("click", () => deleteObservation(obs._id, card));
+    .addEventListener("click", () => deleteObservation(obs._id));
 
   card.querySelector(".goto-now-btn").addEventListener("click", () => {
     const scroll = document.getElementById(`scroll-${obs._id}`);
@@ -211,10 +242,10 @@ function buildCard(obs) {
 
 function prependCard(obs) {
   allObservations.unshift(obs);
+  currentPage = 1;
   buildTagFilter(allObservations);
   if (statsPanel.style.display === "block") buildStats(allObservations);
-  const card = buildCard(obs);
-  observationsList.prepend(card);
+  renderFilteredCards();
 }
 
 function appendCard(obs) {
@@ -243,6 +274,7 @@ function buildTagFilter(observations) {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       activeTag = btn.dataset.tag === "all" ? null : btn.dataset.tag;
+      currentPage = 1;
       renderFilteredCards();
     });
   });
@@ -366,15 +398,48 @@ function buildStats(observations) {
 }
 
 function renderFilteredCards() {
-  observationsList.innerHTML = "";
   const filtered = activeTag
     ? allObservations.filter((o) => o.tag === activeTag)
     : allObservations;
-  if (filtered.length === 0) {
-    observationsList.innerHTML = `<p class="load-error">No observations with tag "${activeTag}".</p>`;
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * pageSize;
+  const end = Math.min(start + pageSize, total);
+  const pageItems = filtered.slice(start, end);
+
+  observationsList.innerHTML = "";
+  if (total === 0) {
+    observationsList.innerHTML = activeTag
+      ? `<p class="load-error">No observations with tag "${activeTag}".</p>`
+      : "";
+  } else {
+    pageItems.forEach((obs) => appendCard(obs));
+  }
+
+  buildPagination(total, start, end, totalPages);
+  emptyState.style.display = total === 0 && !activeTag ? "block" : "none";
+}
+
+function buildPagination(total, start, end, totalPages) {
+  const bar = document.getElementById("paginationBar");
+  const info = document.getElementById("paginationInfo");
+  const pages = document.getElementById("paginationPages");
+  const prevBtn = document.getElementById("prevPageBtn");
+  const nextBtn = document.getElementById("nextPageBtn");
+
+  if (total <= 10) {
+    bar.style.display = "none";
     return;
   }
-  filtered.forEach((obs) => appendCard(obs));
+
+  bar.style.display = "flex";
+  info.textContent = `${start + 1}–${end} of ${total}`;
+  pages.textContent = `${currentPage} / ${totalPages}`;
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === totalPages;
 }
 
 // ─── FORM TOGGLE ──────────────────────────────────────────────
@@ -642,7 +707,7 @@ function showFormError(msg) {
 
 // ─── DELETE ───────────────────────────────────────────────────
 
-async function deleteObservation(id, cardEl) {
+async function deleteObservation(id) {
   const confirmed = window.confirm(
     "Delete this observation? This cannot be undone."
   );
@@ -651,14 +716,11 @@ async function deleteObservation(id, cardEl) {
   try {
     const res = await fetch(`${API.observations}/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("Delete failed");
-    cardEl.remove();
     allObservations = allObservations.filter((o) => o._id !== id);
     activeTag = null;
     buildTagFilter(allObservations);
     if (statsPanel.style.display === "block") buildStats(allObservations);
-    if (observationsList.children.length === 0) {
-      emptyState.style.display = "block";
-    }
+    renderFilteredCards();
   } catch {
     alert("Could not delete. Please try again.");
   }
