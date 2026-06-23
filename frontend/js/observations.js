@@ -1,4 +1,11 @@
 import { escHtml, isDivergence, divergeTooltip, formatSize } from "./utils.js";
+import {
+  getObservations,
+  createObservation,
+  updateObservation,
+  deleteObservation as apiDeleteObservation,
+  getNeoRaw,
+} from "./api.js";
 
 // ===== HAMBURGER NAV =====
 const hamburger = document.getElementById("navHamburger");
@@ -17,11 +24,6 @@ document.addEventListener("click", () => {
   hamburger.setAttribute("aria-expanded", false);
   hamburgerIcon.className = "fa-solid fa-bars";
 });
-
-const API = {
-  observations: "/api/observations",
-  nasa: (id) => `/api/nasa/neo/${id}`,
-};
 
 let selectedAsteroid = null;
 let selectedRating = null;
@@ -84,14 +86,12 @@ function bindPaginationControls() {
     if (currentPage > 1) {
       currentPage--;
       renderFilteredCards();
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
 
   document.getElementById("nextPageBtn").addEventListener("click", () => {
     currentPage++;
     renderFilteredCards();
-    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
@@ -110,9 +110,7 @@ async function checkUrlForAsteroid() {
 
 async function loadObservations() {
   try {
-    const res = await fetch(API.observations);
-    if (!res.ok) throw new Error("Failed to load");
-    const data = await res.json();
+    const data = await getObservations();
     allObservations = data;
     if (data.length === 0) {
       emptyState.style.display = "block";
@@ -505,19 +503,11 @@ async function searchAsteroid(query) {
 async function loadAsteroidById(nasaId) {
   setFieldsLoading(true);
   try {
-    const res = await fetch(API.nasa(nasaId));
-    if (!res.ok) {
-      showDropdownMessage(
-        "Asteroid not found. Check the NASA ID and try again."
-      );
-      clearAsteroidFields();
-      return;
-    }
-    const data = await res.json();
+    const data = await getNeoRaw(nasaId);
     populateAsteroidFields(data);
     closeDropdown();
   } catch {
-    showDropdownMessage("Could not reach NASA. Try again in a moment.");
+    showDropdownMessage("Asteroid not found. Check the NASA ID and try again.");
     clearAsteroidFields();
   }
 }
@@ -655,27 +645,12 @@ function bindFormEvents() {
     };
 
     try {
-      const res = await fetch(API.observations, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      console.log("POST status:", res.status);
-
-      if (!res.ok) {
-        showFormError("Failed to save. Please try again.");
-        return;
-      }
-
-      const saved = await res.json();
-      console.log("saved:", saved);
+      const saved = await createObservation(payload);
       prependCard(saved);
       resetForm();
       closeForm();
       emptyState.style.display = "none";
-    } catch (err) {
-      console.error("POST catch error:", err);
+    } catch {
       showFormError("Could not connect. Please try again.");
     }
   });
@@ -714,8 +689,7 @@ async function deleteObservation(id) {
   if (!confirmed) return;
 
   try {
-    const res = await fetch(`${API.observations}/${id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error("Delete failed");
+    await apiDeleteObservation(id);
     allObservations = allObservations.filter((o) => o._id !== id);
     activeTag = null;
     buildTagFilter(allObservations);
@@ -762,14 +736,7 @@ function bindModalEvents() {
     };
 
     try {
-      const res = await fetch(`${API.observations}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) throw new Error("Update failed");
-      const updated = await res.json();
+      const updated = await updateObservation(id, payload);
       updateCardInDom(updated);
       closeEditModal();
     } catch {
@@ -814,9 +781,7 @@ async function toggleTimeline(obsId, nasaId, btn) {
     '<div class="timeline-line"></div><p class="timeline-loading"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> loading passes...</p>';
 
   try {
-    const res = await fetch(API.nasa(nasaId));
-    if (!res.ok) throw new Error("NASA fetch failed");
-    const data = await res.json();
+    const data = await getNeoRaw(nasaId);
     track.innerHTML = '<div class="timeline-line"></div>';
     renderTimeline(track, data.close_approach_data || []);
     track.dataset.loaded = "true";
