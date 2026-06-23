@@ -52,20 +52,32 @@
     );
   background-repeat: repeat;
   background-size: 360px 300px;
-  animation: starDrift 140s linear infinite;
+  animation: starDrift 60s linear infinite;
 }
 
 .space-bg::after {
   background-size: 520px 440px;
   opacity: 0.5;
   animation:
-    starDrift 220s linear infinite reverse,
+    starDriftReverse 90s linear infinite,
     twinkle 7s ease-in-out infinite;
 }
 
 @keyframes starDrift {
+  from {
+    background-position: 0 0;
+  }
   to {
-    transform: translate(70px, 46px);
+    background-position: 360px 300px;
+  }
+}
+
+@keyframes starDriftReverse {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -520px -440px;
   }
 }
 
@@ -329,7 +341,10 @@
   letter-spacing: 1px;
   padding: 5px 10px;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s;
 }
 
 .page-size-btn:hover {
@@ -393,7 +408,9 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
 }
 
 .pagination-btn:hover:not(:disabled) {

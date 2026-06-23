@@ -76,20 +76,32 @@
       transparent
     );
   background-size: 600px 300px;
-  animation: starDrift 140s linear infinite;
+  animation: starDrift 60s linear infinite;
 }
 
 .space-bg::after {
   background-size: 520px 440px;
   opacity: 0.5;
   animation:
-    starDrift 220s linear infinite reverse,
+    starDriftReverse 90s linear infinite,
     twinkle 7s ease-in-out infinite;
 }
 
 @keyframes starDrift {
+  from {
+    background-position: 0 0;
+  }
   to {
-    transform: translate(70px, 46px);
+    background-position: 600px 300px;
+  }
+}
+
+@keyframes starDriftReverse {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -520px -440px;
   }
 }
 
@@ -100,6 +112,45 @@
   }
   50% {
     opacity: 0.75;
+  }
+}
+
+/* ===== SHOOTING STARS ===== */
+.shooting-star {
+  position: fixed;
+  height: 1.5px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(200, 130, 58, 0.7),
+    rgba(255, 220, 160, 1)
+  );
+  border-radius: 0 2px 2px 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transform-origin: right center;
+}
+
+@keyframes shootStar {
+  0%,
+  75% {
+    opacity: 0;
+    transform: rotate(-35deg) translateX(0);
+  }
+  78% {
+    opacity: 1;
+  }
+  92%,
+  100% {
+    opacity: 0;
+    transform: rotate(-35deg) translateX(900px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shooting-star {
+    display: none;
   }
 }
 

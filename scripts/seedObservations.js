@@ -8,7 +8,7 @@ const MONGO_URI = process.env.MONGODB_URI;
 const DB_NAME = "closecall";
 const COLLECTION = "observations";
 
-const SEED_LIMIT = 10;
+const SEED_LIMIT = 1000;
 
 const notes = [
   "Unusually fast approach velocity for this size class.",
@@ -46,7 +46,9 @@ function generateTag(isHazardous, missDistanceLunar) {
 }
 
 function randomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
 }
 
 function getWeekRange(weeksAgo) {
