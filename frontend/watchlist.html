@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CloseCall — Watchlist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/watchlist.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="nav">
+      <button
+        class="nav-hamburger"
+        id="navHamburger"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-bars" id="hamburgerIcon"></i>
+      </button>
+      <span class="nav-logo">CLOSECALL</span>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">FEED</a>
+        <a href="watchlist.html" class="nav-link active">WATCHLIST</a>
+        <a href="observations.html" class="nav-link">OBSERVATIONS</a>
+        <a href="learn.html" class="nav-link">LEARN</a>
+      </div>
+    </nav>
+
+    <main class="page">
+      <header class="page-head">
+        <div>
+          <h1>My watchlist</h1>
+          <p class="page-sub" id="watchlist-count">Loading…</p>
+        </div>
+      </header>
+
+      <section id="watchlist" class="watch-list"></section>
+
+      <section id="empty-state" class="empty-state" hidden>
+        <h2>Nothing saved yet</h2>
+        <p>
+          Head to the feed and hit Watch on any asteroid to start tracking its
+          close approaches.
+        </p>
+        <a class="btn-submit" href="index.html">Browse the feed</a>
+      </section>
+    </main>
+
+    <script type="module" src="js/watchlist.js"></script>
+  </body>
+</html>

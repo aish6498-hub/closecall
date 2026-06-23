@@ -1,0 +1,38 @@
+{
+  "name": "closecall",
+  "version": "1.0.0",
+  "description": "NASA Near-Earth Object tracker with personal observation layer",
+  "type": "module",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aish6498-hub/closecall.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aish6498-hub/closecall/issues"
+  },
+  "author": "Aishwarya Rajmohan, Priyan Baskar",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./node_modules/nodemon/bin/nodemon.js server.js",
+    "seed": "node scripts/seedObservations.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "mongodb": "7.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.6.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.4"
+  }
+}
