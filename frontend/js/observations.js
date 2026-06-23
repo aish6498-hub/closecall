@@ -310,7 +310,9 @@ function buildStats(observations) {
   document.getElementById("statsSizeChart").innerHTML = `
     <p class="stats-section-label">SIZE DISTRIBUTION</p>
     <div class="size-bars">
-      ${buckets.map((b) => `
+      ${buckets
+        .map(
+          (b) => `
         <div class="size-bar-row">
           <span class="size-bar-label">${b.label}</span>
           <div class="size-bar-track">
@@ -318,7 +320,9 @@ function buildStats(observations) {
           </div>
           <span class="size-bar-count">${b.count}</span>
         </div>
-      `).join("")}
+      `
+        )
+        .join("")}
     </div>
   `;
 
@@ -344,14 +348,18 @@ function buildStats(observations) {
         </tr>
       </thead>
       <tbody>
-        ${divergences.map((o) => `
+        ${divergences
+          .map(
+            (o) => `
           <tr>
             <td>${escHtml(o.asteroidName)}</td>
             <td>${o.dangerRating}/5</td>
             <td>${o.isHazardous ? "HAZARDOUS" : "SAFE"}</td>
             <td>${o.isHazardous && o.dangerRating <= 2 ? "You rated safer than NASA" : "You rated more dangerous than NASA"}</td>
           </tr>
-        `).join("")}
+        `
+          )
+          .join("")}
       </tbody>
     </table>
   `;
