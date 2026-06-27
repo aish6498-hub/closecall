@@ -60,6 +60,12 @@ router.post("/", async (req, res) => {
         .json({ error: "nasaId, asteroidName and dangerRating are required" });
     }
 
+    // You might want to consider validating dangerRating in this route as well to force it to be within range.
+    // If the client was to be swapped out right now this would allow invalid ratings. Something like:
+    // const rating = Number(dangerRating);
+    // if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    //   return res.status(400).json({ error: "dangerRating must be 1–5" });
+    // }
     const newObservation = {
       nasaId,
       asteroidName,
