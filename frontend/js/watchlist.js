@@ -95,6 +95,9 @@ function openEditForm(card, item) {
     submitBtn.disabled = true;
     submitBtn.textContent = "Saving…";
 
+    // You refetch with load() every time, which re-fetches the entire list on every mutation and triggers an API call
+    // on every item. If your database is very large this will be computationally expensive. Perhaps you could limit the scope
+    // of load based on what mutation is performed?
     try {
       await updateWatchlistItem(item._id, { tag, note });
       await load();
