@@ -1,5 +1,6 @@
 const NASA_BASE = "/api/nasa";
 
+// I like how you centralize all of your fetch calls here and use one request() for consistency!
 async function request(url, options) {
   const res = await fetch(url, options);
   if (!res.ok) {
