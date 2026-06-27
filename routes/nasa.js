@@ -53,6 +53,8 @@ router.get("/feed", async (req, res) => {
       count: rows.length,
       objects: rows,
     });
+    // I would suggest replacing below with catch (err) { console.error("NASA feed error:", err); ... then rest of your code
+    // That way, if it does fail, you can bind the error and see why
   } catch {
     res.status(500).json({ error: "Failed to fetch from NASA" });
   }
@@ -67,6 +69,7 @@ router.get("/neo/:id", async (req, res) => {
     }
     const data = await response.json();
     res.json(data);
+    // I'd also suggest binding the error here
   } catch {
     res.status(500).json({ error: "Failed to fetch from NASA" });
   }
