@@ -14,3 +14,5 @@ export async function connectDB() {
   console.log("Connected to MongoDB");
   return db;
 }
+
+// It doean't seem like you execute client.close(), which risks the MongoDB driver holding the open connection
